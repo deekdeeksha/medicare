@@ -1,13 +1,13 @@
 import { router, useFocusEffect } from "expo-router";
 import { useCallback } from "react";
-import {  Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingScreen(){
     useFocusEffect(
         useCallback(()=>{
             const timer=setTimeout(()=>{
-            router.replace("/loginscreen")
+            router.replace("")
             },3000)
         return()=>clearTimeout(timer)
         },[])
