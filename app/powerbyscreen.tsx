@@ -3,11 +3,11 @@ import { useCallback } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function SettingScreen(){
+export default function PowerByScreen(){
     useFocusEffect(
         useCallback(()=>{
             const timer=setTimeout(()=>{
-            router.replace("")
+            router.replace("/loginscreen")
             },3000)
         return()=>clearTimeout(timer)
         },[])

@@ -1,4 +1,5 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { router } from "expo-router";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -130,7 +131,7 @@ export default function(){
                     </View>
 
                     <Text style={{fontSize:14,color:"#8A98AD"}}>Already have an account?
-                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}}>Login</Text></Text>
+                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}} onPress={()=>router.replace('/loginscreen')}>Login</Text></Text>
             
         
         </View> 

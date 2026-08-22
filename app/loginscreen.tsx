@@ -8,7 +8,7 @@ export default function LoginScreen() {
     useFocusEffect(
         useCallback(()=>{
             const timer=setTimeout(()=>{
-                router.replace("/Registerscreen")
+                router.replace("/(tabs)")
             },3000)
             return()=> clearTimeout(timer)
         },[])

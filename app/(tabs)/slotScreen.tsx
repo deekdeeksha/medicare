@@ -1,11 +1,40 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Footer from "@/components/footer";
+import Slots from "@/components/slots";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Slot from "../../components/boxButtons";
 
 export default function SlotsScreen() {
+  const blue = {
+  primary: "#195FDB",
+  bright: "#3695FF",
+  dark: "#123A73",
+  light: "#EAF3FF",
+};
+const green = {
+  primary: "#1C9129",
+  light: "#EEF9F0",
+};
+const purple = {
+  primary: "#8061C5",
+  light: "#F5F0FF",
+};
+const orange = {
+  primary: "#FF9224",
+  light: "#FFF5EA",
+};
+const red = {
+  primary: "#DC2626",
+  light: "#FEF2F2",
+};
+const yellow = {
+  bright: "#FFD21F",
+  light: "#FFF8D6",
+};
   return(
     <SafeAreaView style={{flex:1}}>
-      <ScrollView style={{flex:1,backgroundColor:'white'}} contentContainerStyle={{flexGrow:1,alignItems:'center',gap:40,paddingBottom:100}}>
+      <ScrollView style={{flex:1,backgroundColor:'white'}} contentContainerStyle={{flexGrow:1,alignItems:'center',gap:40,padding:10,paddingBottom:150}}>
+      
       {/* c1  */}
       <View style={styles.c1}>
         <Text style={styles.h1}>Medicine Slots</Text>
@@ -13,101 +42,115 @@ export default function SlotsScreen() {
       </View>
       {/* closing c1 */}
 
-      {/* c2------------------------------------------------------------------------------------------------------------------------- */}
-      <View style={styles.c2}>
-        
-        <View  style={styles.c2_boxes}>
-          <MaterialCommunityIcons name="slot-machine" size={30} color="blue"/>
-          <Text style={[styles.h4]}>5</Text>
-          <Text style={styles.h4}>Total slots</Text>
-        </View>
-            
-        <View  style={styles.c2_boxes}>
-          <MaterialCommunityIcons name="slot-machine" size={30} color="green"/>
-          <Text style={[styles.h4]}>5</Text>
-          <Text style={styles.h4}>Filled slots</Text>
-        </View>
-
-        <View  style={styles.c2_boxes}>
-          <MaterialCommunityIcons name="slot-machine" size={30} color="red"/>
-          <Text style={[styles.h4]}>5</Text>
-          <Text style={styles.h4}>Empty slots</Text>
-        </View>
+      {/* c2------------------------ */}
+    
+      <View style={styles.c2}>  
+      <Slot 
+        icons="view-grid"
+        iconColor={blue.bright}
+        iconSize={28}
+        value={5}
+        title="Total slots"
+        bgColor={blue.light}
+        tColor={blue.primary}
+      />
+       <Slot 
+        icons="view-grid"
+        iconColor={green.primary}
+        iconSize={28}
+        value={3}
+        title="Filled slots"
+        bgColor={green.light}
+        tColor={green.primary}
+      />
+         <Slot 
+        icons="view-grid"
+        iconColor={red.primary}
+        iconSize={28}
+        value={2}
+        title="Empty slots"
+        bgColor={red.light}
+        tColor={red.primary}
+      />
 
       </View>
+      {/* closing c2 */}    
+    
 
-     {/* c3------------------------------------------------------------------------------------------------------------------------ */}
+     {/* c3------------------------- */}
       <View style={styles.c3}>
-
-        {/* slot 1 */}
-        <View style={styles.s1}>
-          {/* status */}
-          <View  style={styles.status}>
-            <View style={{padding:5,paddingHorizontal:20,borderRadius:11,backgroundColor:'red',alignItems:'center',justifyContent:'center'}}>
-              <Text style={styles.h5}>Slot 1</Text>
-            </View>
-            <MaterialCommunityIcons name="information" size={34} color={"rgba(0, 102, 255, 0.7)"}/>
-            
-            <View style={{padding:5,paddingHorizontal:20,borderRadius:11,backgroundColor:'green',alignItems:'center',justifyContent:'center'}}>
-              <Text style={styles.h5}>active</Text>
-            </View>
-          </View>  
-
-          <View  style={styles.text}>
-            <View style={styles.img}>
-
-            </View>
-            
-            <View style={styles.des}>
-              <Text style={styles.h4}>Paracetamol 500mg</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="timeline"/> 9:00AM</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="calendar-today"/> Today</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="repeat" /> twice a day</Text>       
-            </View>
-          </View>
-
-          <View  style={styles.view}>
-            <Text style={[styles.h5,{color:'black'}]}>Tap to view / edit</Text>
-            <MaterialCommunityIcons name="arrow-right-thick" size={28} />
-          </View>
-        </View>
       
-      {/* slot 2 --------------------------------------------------------------------------------------------------------------------*/}
-       {/* slot 1 */}
-        <View style={styles.s1}>
-          {/* status */}
-          <View  style={styles.status}>
-            <View style={{padding:5,paddingHorizontal:20,borderRadius:11,backgroundColor:'red',alignItems:'center',justifyContent:'center'}}>
-              <Text style={styles.h5}>Slot 1</Text>
-            </View>
-            <MaterialCommunityIcons name="information" size={34} color={"rgba(0, 102, 255, 0.7)"}/>
-            
-            <View style={{padding:5,paddingHorizontal:20,borderRadius:11,backgroundColor:'green',alignItems:'center',justifyContent:'center'}}>
-              <Text style={styles.h5}>active</Text>
-            </View>
-          </View>  
+      <Slots
+        iconColor={orange.primary}
+        slotColor={orange.primary}
+        slotValue={1}
+        slotInfo="slot value 1"
+        slotStatus="active"
+        day="today"
+        time="7:00 Pm"
+        tabletName="paracemtaol 500mg"
+        repeat="twice a day"
+      />
 
-          <View  style={styles.text}>
-            <View style={styles.img}>
-
-            </View>
-            
-            <View style={styles.des}>
-              <Text style={styles.h4}>Paracetamol 500mg</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="timeline"/> 9:00AM</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="calendar-today"/> Today</Text>
-              <Text style={styles.h6}><MaterialCommunityIcons name="repeat" /> twice a day</Text>       
-            </View>
-          </View>
-
-          <View  style={styles.view}>
-            <Text style={[styles.h5,{color:'black'}]}>Tap to view / edit</Text>
-            <MaterialCommunityIcons name="arrow-right-thick" size={28} />
-          </View>
-        </View>
-      
+      <Slots
+        iconColor={blue.bright}
+        slotColor={blue.bright}
+        slotValue={2}
+        slotInfo="slot value 2"
+        slotStatus="active"
+        day="today"
+        time="7:00 Pm"
+        tabletName="paracemtaol 500mg"
+        repeat="twice a day"
+      />
+      <Slots
+        iconColor={purple.primary}
+        slotColor={purple.primary}
+        slotValue={3}
+        slotInfo="slot value 3"
+        slotStatus="active"
+        day="today"
+        time="7:00 Pm"
+        tabletName="paracemtaol 500mg"
+        repeat="twice a day"
+      />
+      <Slots
+        iconColor={green.primary}
+        slotColor={green.primary}
+        slotValue={4}
+        slotInfo="slot value 4"
+        slotStatus="active"
+        day="today"
+        time="7:00 Pm"
+        tabletName="paracemtaol 500mg"
+        repeat="twice a day"
+      />
+      <Slots
+        iconColor={yellow.bright}
+        slotColor={yellow.bright}
+        slotValue={5}
+        slotInfo="slot value 5"
+        slotStatus="not set"
+        day="today"
+        time="7:00 Pm"
+        tabletName="paracemtaol 500mg"
+        repeat="twice a day"
+      />
       </View>
         {/* closing c3 */}
+  
+      {/* footer */}
+      <Footer
+      icons="pill-multiple"
+      iconColor="#2563EB"
+      bgColor="#EEF5FF"
+      width={70}
+      height={70}
+      size={40}
+      title="Stay on Track with Your Medicines"
+      subtitle="Take your medicines on time and stay healthy."
+      color="#123A73"      
+      />
 
       </ScrollView>
     </SafeAreaView>
@@ -158,88 +201,17 @@ const styles=StyleSheet.create({
     marginTop:"15%",
     alignItems:'center',
     justifyContent:'space-evenly',
-    borderTopRightRadius:80,
+    gap:30,
     borderTopLeftRadius:80,
-    backgroundColor:'rgba(0, 102, 255, 0.7)',
+    //backgroundColor:'rgba(0, 102, 255, 0.7)',
   },
-  c2_boxes:{
-    minHeight:120,
-    width:'32%',
-    alignItems:'center',
-    justifyContent:'space-evenly',
-    padding:10,
-    borderWidth:0.2,
-    borderRadius:10,
-  },
-  h4:{
-    fontSize:16,
-    fontWeight:'bold'
-  },
-  s1:{
-    minHeight:200,
-    borderRadius:15,
-    width:'90%',
-    alignItems:'center',
-    justifyContent:'space-evenly',
-    padding:5,
-    backgroundColor:'white'
-  },
-  status:{
-    minHeight:50,
-    paddingVertical:5,
-    paddingHorizontal:10,
-    width:'100%',
-    borderTopRightRadius:10,
-    borderTopLeftRadius:10,
-    alignItems:'center',
-    justifyContent:'space-between',
-    flexDirection:'row',
-    backgroundColor:'rgba(108, 196, 236, 0.5)',
-  },
-  text:{
-    minHeight:150,
-    width:'100%',
-    alignItems:'center',
-    justifyContent:'space-evenly',
-    flexDirection:'row',
-    paddingVertical:5,
-  },
-  view:{
-    minHeight:40,
-    width:'100%',
-    backgroundColor:'rgba(108, 196, 236, 0.5)',
-    justifyContent:'space-between',
-    paddingHorizontal:10,
-    alignItems:'center',
-    flexDirection:'row',
-    borderBottomRightRadius:10,
-    borderBottomLeftRadius:10
-  },
-
+  
   h5:{
     fontSize:16,
     fontWeight:'bold',
     color:'white'
   },
-  img:{
-    minHeight:100,
-    width:"28%",
-    padding:1,
-    borderWidth:0.6,
-    borderColor:'rgba(0, 102, 255, 0.7)',
-    alignItems:'center',
-    justifyContent:'center',
-    backgroundColor:'white',
-    borderRadius:100,
-  },
-  des:{
-    padding:10,
-    paddingHorizontal:15,
-    backgroundColor:'white',
-    alignItems:'center',
-    gap:5,
-    justifyContent:'space-evenly'
-  },
+  
   h6:{
     fontSize:16
   }
