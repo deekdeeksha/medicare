@@ -5,14 +5,14 @@ import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, Toucha
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
-    // useFocusEffect(
-    //     useCallback(()=>{
-    //         const timer=setTimeout(()=>{
-    //             router.replace("/Registerscreen")
-    //         },3000)
-    //         return()=> clearTimeout(timer)
-    //     },[])
-    // );
+    useFocusEffect(
+        useCallback(()=>{
+            const timer=setTimeout(()=>{
+                router.replace("/(drawer)/(tabs)/activeTablets")
+            },3000)
+            return()=> clearTimeout(timer)
+        },[])
+    );
     return(
         <ImageBackground source={require("../assets/images/medibg.png")}
         style={{flex:1}}
