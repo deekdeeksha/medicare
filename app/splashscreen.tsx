@@ -8,7 +8,7 @@ export default function SplashScreen(){
     useFocusEffect(
         useCallback(()=>{
             const timer=setTimeout(() => {
-                router.replace("/powerbyscreen");
+                router.replace("/profilescreen");
             }, 3000);
 
             return()=>clearTimeout(timer);

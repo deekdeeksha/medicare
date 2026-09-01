@@ -1,8 +1,11 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback } from "react";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function(){
+    
     return(
         <ImageBackground source={require("../assets/images/registerbg.png")}
         style={{flex:1}}
@@ -131,7 +134,8 @@ export default function(){
 
                     <Text style={{fontSize:14,color:"#8A98AD"}}>Already have an account?
                         <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}}>Login</Text></Text>
-            
+                       
+                       {/* <Text onPress={() => router.replace("/profilescreen")}>Add Tablet</Text> */}
         
         </View> 
        </ScrollView>   
