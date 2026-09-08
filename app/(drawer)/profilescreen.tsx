@@ -1,12 +1,21 @@
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Boxes from "../components/displayboxes"
+import Boxes from "../../components/displayboxes"
 import Buttons from "@/components/buttons"; 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useCallback } from "react";
 
 export default function profileScreen() {
-
+     useFocusEffect(
+             useCallback(()=>{
+                 const timer=setTimeout(() => {
+                     router.replace("/biometricset");
+                 }, 3000);
+    
+                 return()=>clearTimeout(timer);
+             },[])
+         );
     return(
         <SafeAreaView style={{flex:1,backgroundColor: "#F7FAF9"}}>
         <View style={styles.container}>
@@ -38,7 +47,7 @@ export default function profileScreen() {
 
          
           <ImageBackground
-            source={require("../assets/images/profilebg.png")}
+            source={require("../../assets/images/profilebg.png")}
             style={{minHeight:200,width:"100%",borderRadius:25,overflow:"hidden"}}>
             <View style={styles.c1}>
         <Image
