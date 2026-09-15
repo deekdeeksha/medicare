@@ -1,10 +1,23 @@
 import Footer from "@/components/footer";
 import Slots from "@/components/slots";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Slot from "../../components/boxButtons";
+import Slot from "../../../components/boxButtons";
 
 export default function SlotsScreen() {
+
+ const handleSlotInfo=(slotNum:number,slotCol:string)=>{
+    Alert.alert(
+      `slot ${slotNum}` ,
+      `Fill the pills in the ${slotCol} slots of the dispencer`
+    
+    )
+ }
+
+
+
+
   const blue = {
   primary: "#195FDB",
   bright: "#3695FF",
@@ -87,6 +100,8 @@ const yellow = {
         slotInfo="slot value 1"
         slotStatus="active"
         day="today"
+         onPressInfo={()=>{handleSlotInfo(1,"orange")}}
+        onPress={()=>{router.push('/add')}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
@@ -99,6 +114,8 @@ const yellow = {
         slotInfo="slot value 2"
         slotStatus="active"
         day="today"
+         onPressInfo={()=>{handleSlotInfo(2,"blue")}}
+        onPress={()=>{router.push('/add')}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
@@ -109,6 +126,8 @@ const yellow = {
         slotValue={3}
         slotInfo="slot value 3"
         slotStatus="active"
+         onPressInfo={()=>{handleSlotInfo(3,"purple")}}
+        onPress={()=>{router.push('/add')}}
         day="today"
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
@@ -118,6 +137,8 @@ const yellow = {
         iconColor={green.primary}
         slotColor={green.primary}
         slotValue={4}
+        onPressInfo={()=>{handleSlotInfo(4,"green")}}
+        onPress={()=>{router.push('/add')}}
         slotInfo="slot value 4"
         slotStatus="active"
         day="today"
@@ -132,6 +153,8 @@ const yellow = {
         slotInfo="slot value 5"
         slotStatus="not set"
         day="today"
+        onPressInfo={()=>{handleSlotInfo(5,"yellow")}}
+        onPress={()=>{router.push('/add')}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"

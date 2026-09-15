@@ -2,9 +2,9 @@ import Footer from "@/components/footer";
 import VerticalButtons from "@/components/verticalButtons";
 import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NextMed from "../../components/nextMed";
-import StatusField from "../../components/statusBox";
-import TimeDateSlots from "../../components/timeDateSlots";
+import NextMed from "../../../components/nextMed";
+import StatusField from "../../../components/statusBox";
+import TimeDateSlots from "../../../components/timeDateSlots";
 export default function home  ()  {
 const blue = {
   primary: "#195FDB",
@@ -29,7 +29,7 @@ const red = {
   light: "#FEF2F2",
 };
   return(
-    <ImageBackground source={require("../../assets/images/homepage.png")} style={{flex:1}}>
+    <ImageBackground source={require("../../../assets/images/homepage.png")} style={{flex:1}}>
     <SafeAreaView style={{flex:1}}>
     <ScrollView style={{flex:1}} contentContainerStyle={{paddingBottom:150,paddingTop:250,gap:40,alignItems:'center',justifyContent:'space-evenly',padding:10}}>
     

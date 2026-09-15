@@ -9,10 +9,12 @@ type slotprops={
     slotColor:string,
     tabletName:string,
     time:string,
+    onPress:()=> void,
+    onPressInfo:()=>void,
     repeat:string,
     day:string
 }
-export default function Slots({day,slotColor,slotValue,slotStatus,slotInfo,iconColor,repeat,time,tabletName}:slotprops){
+export default function Slots({onPressInfo,day,slotColor,slotValue,slotStatus,slotInfo,iconColor,repeat,time,tabletName,onPress }:slotprops){
     return(
 
         <View style={styles.s1}>
@@ -21,7 +23,7 @@ export default function Slots({day,slotColor,slotValue,slotStatus,slotInfo,iconC
             <View style={{padding:5,paddingHorizontal:20,borderRadius:10,backgroundColor:slotColor,alignItems:'center',justifyContent:'center'}}>
               <Text style={styles.h5}>Slot {slotValue}</Text>
             </View>
-            <MaterialCommunityIcons name="information" size={34} color={"rgba(0, 102, 255, 0.7)"}/>
+            <MaterialCommunityIcons onPress={onPressInfo} name="information" size={34} color={"rgba(0, 102, 255, 0.7)"}/>
             
             <View style={{padding:5,paddingHorizontal:20,borderRadius:11,backgroundColor:'green',alignItems:'center',justifyContent:'center'}}>
               <Text style={styles.h5}>{slotStatus}</Text>
@@ -41,7 +43,7 @@ export default function Slots({day,slotColor,slotValue,slotStatus,slotInfo,iconC
             </View>
           </View>
 
-          <TouchableOpacity  style={[styles.view,{backgroundColor:iconColor}]}>
+          <TouchableOpacity onPress={onPress}  style={[styles.view,{backgroundColor:iconColor}]}>
             <Text style={[styles.h5,{color:'black'}]}>Tap to view / edit</Text>
             <MaterialCommunityIcons name="arrow-right-thick" size={28} />
           </TouchableOpacity>
