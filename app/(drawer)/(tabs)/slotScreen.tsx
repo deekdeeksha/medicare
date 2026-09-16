@@ -14,11 +14,7 @@ export default function SlotsScreen() {
     
     )
  }
-
-
-
-
-  const blue = {
+const blue = {
   primary: "#195FDB",
   bright: "#3695FF",
   dark: "#123A73",
@@ -100,11 +96,12 @@ const yellow = {
         slotInfo="slot value 1"
         slotStatus="active"
         day="today"
-         onPressInfo={()=>{handleSlotInfo(1,"orange")}}
-        onPress={()=>{router.push('/add')}}
+        onPressInfo={()=>{handleSlotInfo(1,"orange")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"1",color:"orange"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
 
       <Slots
@@ -115,10 +112,11 @@ const yellow = {
         slotStatus="active"
         day="today"
          onPressInfo={()=>{handleSlotInfo(2,"blue")}}
-        onPress={()=>{router.push('/add')}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"2",color:"blue"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={purple.primary}
@@ -127,24 +125,26 @@ const yellow = {
         slotInfo="slot value 3"
         slotStatus="active"
          onPressInfo={()=>{handleSlotInfo(3,"purple")}}
-        onPress={()=>{router.push('/add')}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"3",color:"purple"}})}}
         day="today"
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={green.primary}
         slotColor={green.primary}
         slotValue={4}
         onPressInfo={()=>{handleSlotInfo(4,"green")}}
-        onPress={()=>{router.push('/add')}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"4",color:"green"}})}}
         slotInfo="slot value 4"
         slotStatus="active"
         day="today"
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={yellow.bright}
@@ -154,10 +154,11 @@ const yellow = {
         slotStatus="not set"
         day="today"
         onPressInfo={()=>{handleSlotInfo(5,"yellow")}}
-        onPress={()=>{router.push('/add')}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"5",color:"yellow"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       </View>
         {/* closing c3 */}
@@ -238,6 +239,5 @@ const styles=StyleSheet.create({
   h6:{
     fontSize:16
   }
-
 
 })

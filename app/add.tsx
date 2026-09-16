@@ -1,13 +1,19 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from "react";
-import { ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { SafeAreaView } from "react-native-safe-area-context";
 export  default function TabletLayout() {
 
+const {slot,color}=useLocalSearchParams();
+//need to add text to speech  for  all the info
+
+
 const[category, setCategory] = useState(null);
-const[compartement, setCompartement] = useState(null);  
+const[compartement, setCompartement] = useState("");
+const[C_color,setC_color]=useState("");  
 const[frequency,setFrequcnecy]=useState(null);
 
 const [date, setDate] = useState(new Date());//start date
@@ -22,8 +28,7 @@ const[showTimePicker,setShowTimePicker]=useState(false);
 //category
 const  categories=[
   {label:  "Tablet",value: 'tablet'},
-  {label:  "Capsule",value:  'capsule'},
-  
+  {label:  "Capsule",value:  'capsule'}, 
 ]
 // start date picker
 const onChangeDate = (event, selectedDate) => {
@@ -50,6 +55,20 @@ const onChangeEndDate=(event,selectedEndDate)=>{
   }
 }
 
+useEffect(()=>{
+ const loadData=async()=>{
+  try{
+    if(slot){
+      setCompartement(slot);
+      setC_color(color);
+    }
+  }
+  catch(error){
+    console.log("Error loading data:",error);
+  }
+}
+  loadData();
+},[])
 
 const frequnecies=[
   {label:'Once a Day', value:'Once a Day'},
@@ -59,6 +78,36 @@ const frequnecies=[
   {label:'Every 8 Hours', value:'TEvery 8 Hours'},
   {label:'Every 12 Hours', value:'TEvery 12 Hours'},
 ]
+
+
+
+  const showInfo=(field:string)=>{
+        if(field==="name"){
+          Alert.alert("Medicine Name", "Enter the name of the medicine you want to add in the dispenser")
+        }
+        else if(field==="category"){
+          Alert.alert("Category", "Select the category of the medicine whether it is a tablet or capsule you want to add in the dispenser")
+        }
+        else if(field==="frequency"){
+          Alert.alert("Frequency", "Select the frequency of the medicine you want to add in the dispenser")
+        }
+        else if(field==="startdate"){
+          Alert.alert("Repetation", "Select the start date from when you want to repeat the medicine")
+        }
+        else if(field==="enddate"){
+          Alert.alert("Repetation End Date","Select the end date of the medicine till which date u need it repeated")
+        }
+        else if(field==="time"){
+          Alert.alert("Time", "Select the time when you want to take the medicine")
+        }
+        else if(field==="notes"){
+          Alert.alert("Notes", "Add any additional notes about the medicine")
+        }
+        else if(field==="compartement"){
+          Alert.alert("Slot Number", "This is the slot number of the dispenser where you want to add the medicine")
+        }
+
+  }
 
 
   return(
@@ -77,9 +126,9 @@ const frequnecies=[
                   <MaterialIcons name="medical-services"  color={"white"} size={28} />
               </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}} onPress={()=>{showInfo("name")}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
    
     
@@ -97,9 +146,9 @@ const frequnecies=[
               <View style={{backgroundColor:'rgba(52, 132, 223, 0.74)',flexDirection:'row',alignItems:'center',justifyContent:'center',padding:5,borderRadius:10}}>
                   <MaterialIcons name="category"  color={"white"} size={28} />
               </View>  
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity  onPress={()=>{showInfo("category")}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>
 
           <View  style={styles.text}>
@@ -120,9 +169,9 @@ const frequnecies=[
                   <MaterialIcons name="repeat"  color={"white"} size={28} />
               </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>{showInfo('frequency')}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
    
           <View  style={styles.text}>
@@ -140,9 +189,9 @@ const frequnecies=[
                   <MaterialIcons name="date-range"  color={"white"} size={28} />
               </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>{showInfo('start-date')}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
    
           <View  style={styles.text}>
@@ -169,9 +218,9 @@ const frequnecies=[
                   <MaterialIcons name="timeline"  color={"white"} size={28} />
           </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>{showInfo('time')}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
     
           <View  style={styles.text}>
@@ -204,9 +253,9 @@ const frequnecies=[
                   <MaterialIcons name="date-range"  color={"white"} size={28} />
           </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>{showInfo('enddate')}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
        
           
@@ -234,9 +283,9 @@ const frequnecies=[
                   <MaterialIcons name="notes"  color={"white"} size={28} />
           </View> 
 
-              <View  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
+              <TouchableOpacity onPress={()=>{showInfo('notes')}} style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}}>
                   <MaterialIcons name="info" size={28} color={"white"}/>
-              </View>
+              </TouchableOpacity>
           </View>   
     
         
@@ -247,14 +296,37 @@ const frequnecies=[
         </View>
         {/* closing notes */}
 
+          <View style={styles.c1}>
+
+            <View style={styles.icon}>
+              <View style={{backgroundColor:'rgba(52, 132, 223, 0.74)',flexDirection:'row',alignItems:'center',justifyContent:'center',padding:5,borderRadius:10}}>
+                  <MaterialIcons name="add-box"  color={"white"} size={28} />
+              </View> 
+
+              <TouchableOpacity  style={{backgroundColor:'green',borderRadius:10,padding:5,marginTop:5,borderWidth:0.2,alignItems:'center',justifyContent:'center'}} onPress={()=>{showInfo("compartement")}}>
+                  <MaterialIcons name="info" size={28} color={"white"}/>
+              </TouchableOpacity>
+          </View>   
+   
+    
+          <View  style={styles.text}>
+            <Text style={styles.h3}>Slot Number</Text>
+            <TextInput readOnly value={compartement}  style={[styles.input,{backgroundColor:C_color}]} placeholder="e.g , 1"/>
+          </View>
+        </View>
+
 
         </View>
         {/* closing container */}
 
         <TouchableOpacity  style={styles.btn}>
           <Text style={[styles.h3,{color:'white',fontSize:22}]}><MaterialIcons  name="verified" size={28}/> Save</Text>
+          
         </TouchableOpacity>
-      </ScrollView>
+
+          
+
+      </ScrollView>         
     </SafeAreaView>
   </ImageBackground>    
   )

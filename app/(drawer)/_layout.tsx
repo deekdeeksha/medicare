@@ -1,28 +1,20 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Drawer } from "expo-router/drawer";
-import { Image, Text, View } from "react-native";
 export  default function Drawernavigate(){
+    const size=28;
     return(
-        <Drawer screenOptions={{headerShown:false}}>
-          
-          
-          <Drawer.Screen
-              name="(tabs)"options={{headerShown: true,title: "home",headerStyle:{height:150},
-                headerTitle: () => (
-                <View style={{ flexDirection: "row", alignItems: "center",justifyContent:'space-evenly' }}>
-                    <Image
-                        source={require("../../assets/images/medi_logo.png")} // 👈 your logo path
-                        style={{ width:80, height:80, marginRight: 8 }}
-                        resizeMode="contain"
-                    />
-                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>MediCare</Text>
-                </View>
-            ),
-  
-  
-        }}
-        />  
-        <Drawer.Screen name="profileScreen" options={{headerShown:true}}/>
+        <Drawer>
+            <Drawer.Screen name="(tabs)" options={{headerShown:true ,title:'Home',drawerIcon:({size})=>(<MaterialCommunityIcons name="home" color={"#3695FF"} size={size} />) }}/> 
+
+            <Drawer.Screen name="profilescreen" options={{headerShown:true,title:'Profile',drawerIcon:({size})=>(<MaterialCommunityIcons name="account" color={"#1C9129"} size={size} />)}} />
+            
+            <Drawer.Screen name="biometricset" options={{headerShown:true,title:'Security & Privacy',drawerIcon:({size})=>(<MaterialCommunityIcons name="lock" color={"#FFD21F"} size={size} />)}} />
+
+            <Drawer.Screen name="Aboutscreen" options={{headerShown:true,title:'About Medicare',drawerIcon:({size})=>(<MaterialCommunityIcons name="information" color={"#FF9224"} size={size} />)}} />
+            
+         
+         
+         
          </Drawer>   
     )
 }
-

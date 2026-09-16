@@ -4,14 +4,14 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PowerByScreen(){
-    useFocusEffect(
-        useCallback(()=>{
-            const timer=setTimeout(()=>{
-            router.replace("/loginscreen")
-            },3000)
-        return()=>clearTimeout(timer)
-        },[])
-    );
+     useFocusEffect(
+         useCallback(()=>{
+             const timer=setTimeout(()=>{
+             router.replace("/loginscreen")
+             },3000)
+         return()=>clearTimeout(timer)
+         },[])
+     );
   return(
     <SafeAreaView style={{flex:1,alignItems:"center",justifyContent:"center"}}>
       <View style={styles.container}>

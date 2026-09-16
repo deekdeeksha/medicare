@@ -8,14 +8,17 @@ type slotProps={
     iconSize:number,
     title:string,
     bgColor:string,
-    tColor:string
+    tColor:string,
+    heading:string,
+   
 }
 
-export default function Slot({icons,iconColor,value,title,bgColor,iconSize,tColor}:slotProps){
+export default function Slot({icons,iconColor,value,title,bgColor,iconSize,tColor,heading}:slotProps){
     return(
          <TouchableOpacity  style={[styles.c2_boxes,{backgroundColor:bgColor}]}>
           <MaterialCommunityIcons name={icons} size={iconSize} color={iconColor}/>
           <Text style={[styles.h3,{color:tColor}]}>{value}</Text>
+          <Text style={[styles.h2,{color:tColor}]}>{heading}</Text>
           <Text style={styles.h4}>{title}</Text>
         </TouchableOpacity>
     )
@@ -37,6 +40,10 @@ const styles=StyleSheet.create({
   h3:{
     fontSize:20,
     fontWeight:'bold'
+  },
+  h2:{
+    fontSize:20,
+    fontWeight:"bold"
   }
   
 })

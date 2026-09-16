@@ -4,6 +4,13 @@ import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, Toucha
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function(){
+    
+    const handleRegister=()=>{ 
+        router.navigate("/(drawer)/(tabs)/activeTablets");
+    }
+
+
+
     return(
         <ImageBackground source={require("../assets/images/registerbg.png")}
         style={{flex:1}}
@@ -94,7 +101,7 @@ export default function(){
             </View>
             </View>
 
-            <TouchableOpacity style={styles.loginbtn}>
+            <TouchableOpacity style={styles.loginbtn} onPress={handleRegister}>
                         <Text style={styles.login}>Register</Text>
                         <MaterialIcons
                         name="arrow-forward"

@@ -1,18 +1,15 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { router, useFocusEffect } from "expo-router";
-import { useCallback } from "react";
+import { router } from "expo-router";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
-    useFocusEffect(
-        useCallback(()=>{
-            const timer=setTimeout(()=>{
-                router.replace("/(tabs)")
-            },3000)
-            return()=> clearTimeout(timer)
-        },[])
-    );
+    const handleLogin=()=>{
+        router.navigate("/Registerscreen");
+    }
+    
+    
+    
     return(
         <ImageBackground source={require("../assets/images/medibg.png")}
         style={{flex:1}}
@@ -63,7 +60,7 @@ export default function LoginScreen() {
                     </TouchableOpacity>
 
                     
-                    <TouchableOpacity style={styles.loginbtn}>
+                    <TouchableOpacity style={styles.loginbtn} onPress={handleLogin}>
                         <Text style={styles.login}>Login</Text>
                         <MaterialIcons
                         name="arrow-forward"
