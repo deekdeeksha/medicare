@@ -1,12 +1,64 @@
+import { registerUser } from "@/config/auth";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function(){
-    
-    const handleRegister=()=>{ 
-        router.navigate("/(drawer)/(tabs)/activeTablets");
+    const[errormsg,setErrormsg]=useState("")
+    const[name,setName]=useState("")
+     const[email,setEmail]=useState("")
+      const[phoneno,setPhoneno]=useState("")
+       const[password,setPassword]=useState("")
+        const[confirmpass,setConfirmpass]=useState("")
+
+    const handleRegister=async()=>{ 
+        const passwordRegex =/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/;
+        const emailRegex =/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!name||!email||!password||!confirmpass||!phoneno){
+            setErrormsg("Fill all the fileds")
+            return
+        }
+        else if(Number(phoneno)<10){
+            setErrormsg("Phone number must contain 10 digit")
+            return
+        }
+        else if(confirmpass!=password){
+            setErrormsg("The confirm password is not matching")
+            return
+        }
+        else if(!passwordRegex.test(password)){
+            setErrormsg("Password must contain more than 8,less than 16 characters and must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")
+            return
+        }
+        else if(!emailRegex.test(email)){
+            setErrormsg("Enter a valid email")
+            return
+        }
+        else{
+            setErrormsg("")
+            try{
+            const register=await registerUser(email,password);
+            if(register.success){
+                 Alert.alert("successfull","Registration completed")
+                 console.log(register.user);
+                 console.log(register.message);
+                 router.replace("/verificationscreen")
+                 }
+            else{
+                Alert.alert("Failed","Registration failed")
+                console.log(register.message);
+            }     
+           
+            }
+            catch(error){
+                console.log(error)
+            }
+            
+           
+        }
+        
     }
 
 
@@ -31,7 +83,9 @@ export default function(){
                 </View>
                 
                 <TextInput style={styles.input} placeholder="Enter your full name" 
-                placeholderTextColor={"#3A7BFF"}/>
+                placeholderTextColor={"#3A7BFF"}
+                value={name}
+                onChangeText={setName}/>
             </View>
             </View>
 
@@ -47,7 +101,9 @@ export default function(){
                 </View>
                 
                 <TextInput style={styles.input} placeholder="Enter your email address" 
-                placeholderTextColor={"#3A7BFF"}/>
+                placeholderTextColor={"#3A7BFF"}
+                value={email}
+                onChangeText={setEmail}/>
             </View>
             </View>
 
@@ -63,7 +119,9 @@ export default function(){
                 </View>
                 
                 <TextInput style={styles.input} placeholder="Enter your phone number" 
-                placeholderTextColor={"#3A7BFF"}/>
+                placeholderTextColor={"#3A7BFF"}
+                value={phoneno}
+                onChangeText={setPhoneno}/>
             </View>
             </View>
 
@@ -80,7 +138,9 @@ export default function(){
                 
                 <TextInput style={styles.input} placeholder="Create a password" 
                 placeholderTextColor={"#3A7BFF"}
-                 secureTextEntry={true}/>
+                 secureTextEntry={true}
+                 value={password}
+                 onChangeText={setPassword}/>
             </View>
             </View>
 
@@ -97,10 +157,13 @@ export default function(){
                 
                 <TextInput style={styles.input} placeholder="Confirm your password" 
                 placeholderTextColor={"#3A7BFF"}
-                secureTextEntry={true}/>
+                secureTextEntry={true}
+                value={confirmpass}
+                onChangeText={setConfirmpass}/>
             </View>
             </View>
 
+            <Text style={{color:"red",fontSize:14,fontWeight:"bold"}}>{errormsg}</Text>
             <TouchableOpacity style={styles.loginbtn} onPress={handleRegister}>
                         <Text style={styles.login}>Register</Text>
                         <MaterialIcons

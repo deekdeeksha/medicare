@@ -34,7 +34,7 @@ export default function Bioboxes({icon,iconSize,iconColor,iconBg,title,subtitle,
 } 
 
 const styles=StyleSheet.create({
-    c2:{
+    c2:{ 
         minHeight:80,
         width:"100%",
         backgroundColor:"#FFFFFF",
@@ -51,7 +51,7 @@ const styles=StyleSheet.create({
         padding:5,
         alignItems:"center",
         justifyContent:'center',
-        borderRadius:10,
+        borderRadius:15,
     },
 
     textbox:{

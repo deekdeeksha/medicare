@@ -88,7 +88,7 @@ export default function AboutScreen(){
                         icon="account-group-outline"
                         iconSize={30}
                         iconColor="#6C63FF" 
-                        iconBg="#F1EEFF"
+                        iconBg="#F1EEFF" 
                         title="Developed By"
                         subtitle="Deeksha DP"
                         titlesize={18}
