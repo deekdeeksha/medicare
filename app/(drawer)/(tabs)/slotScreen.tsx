@@ -1,11 +1,20 @@
 import Footer from "@/components/footer";
 import Slots from "@/components/slots";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slot from "../../../components/boxButtons";
 
 export default function SlotsScreen() {
-  const blue = {
+
+ const handleSlotInfo=(slotNum:number,slotCol:string)=>{
+    Alert.alert(
+      `slot ${slotNum}` ,
+      `Fill the pills in the ${slotCol} slots of the dispencer`
+    
+    )
+ }
+const blue = {
   primary: "#195FDB",
   bright: "#3695FF",
   dark: "#123A73",
@@ -31,6 +40,7 @@ const yellow = {
   bright: "#FFD21F",
   light: "#FFF8D6",
 };
+
   return(
     <SafeAreaView style={{flex:1}}>
       <ScrollView style={{flex:1,backgroundColor:'white'}} contentContainerStyle={{flexGrow:1,alignItems:'center',gap:40,padding:10,paddingBottom:150}}>
@@ -87,9 +97,12 @@ const yellow = {
         slotInfo="slot value 1"
         slotStatus="active"
         day="today"
+        onPressInfo={()=>{handleSlotInfo(1,"orange")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"1",color:"orange"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
 
       <Slots
@@ -99,9 +112,12 @@ const yellow = {
         slotInfo="slot value 2"
         slotStatus="active"
         day="today"
+         onPressInfo={()=>{handleSlotInfo(2,"blue")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"2",color:"blue"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={purple.primary}
@@ -109,21 +125,27 @@ const yellow = {
         slotValue={3}
         slotInfo="slot value 3"
         slotStatus="active"
+         onPressInfo={()=>{handleSlotInfo(3,"purple")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"3",color:"purple"}})}}
         day="today"
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={green.primary}
         slotColor={green.primary}
         slotValue={4}
+        onPressInfo={()=>{handleSlotInfo(4,"green")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"4",color:"green"}})}}
         slotInfo="slot value 4"
         slotStatus="active"
         day="today"
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       <Slots
         iconColor={yellow.bright}
@@ -132,9 +154,12 @@ const yellow = {
         slotInfo="slot value 5"
         slotStatus="not set"
         day="today"
+        onPressInfo={()=>{handleSlotInfo(5,"yellow")}}
+        onPress={()=>{router.push({pathname:'/add',params:{slot:"5",color:"yellow"}})}}
         time="7:00 Pm"
         tabletName="paracemtaol 500mg"
         repeat="twice a day"
+      
       />
       </View>
         {/* closing c3 */}
@@ -215,6 +240,5 @@ const styles=StyleSheet.create({
   h6:{
     fontSize:16
   }
-
-
 })
+

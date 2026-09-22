@@ -1,21 +1,12 @@
+import Buttons from "@/components/buttons";
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { router, useFocusEffect } from "expo-router";
+import { router } from "expo-router";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Boxes from "../../components/displayboxes"
-import Buttons from "@/components/buttons"; 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useCallback } from "react";
+import Boxes from "../../components/displayboxes";
 
 export default function profileScreen() {
-     useFocusEffect(
-             useCallback(()=>{
-                 const timer=setTimeout(() => {
-                     router.replace("/biometricset");
-                 }, 3000);
-    
-                 return()=>clearTimeout(timer);
-             },[])
-         );
+     
     return(
         <SafeAreaView style={{flex:1,backgroundColor: "#F7FAF9"}}>
         <View style={styles.container}>
@@ -88,6 +79,8 @@ uri:"https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbM
     <Text style={styles.title}>
         Personal Information
     </Text>
+
+    
 </View>
         
         <View style={styles.perinfo}>
@@ -122,7 +115,7 @@ uri:"https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbM
             iconSize={28}/>
         </View>
 
-        <Buttons
+        <Buttons 
         icon="logout"
         iconColor="#E31A17"
         iconSize={24}
@@ -135,6 +128,8 @@ uri:"https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbM
         borColor="#F2BCBC"
         borSize={2}
         />
+
+        
         </ScrollView>
         </View>
         </SafeAreaView>

@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -19,7 +20,7 @@ export default function VerificationScreen() {
           address. Please check your inbox and click{"\n"}
           the link to verify your account.</Text>
 
-            <View style={styles.c1}>
+            <View style={styles.c1}> 
             <View>
             <MaterialCommunityIcons
               name="email-outline"
@@ -40,7 +41,7 @@ export default function VerificationScreen() {
         </View>
 
        
-        <TouchableOpacity
+        <TouchableOpacity onPress={()=>{router.navigate("/loginscreen")}}
           style={styles.btn1}>
           <Text style={styles.logintext}>
             Back to Login

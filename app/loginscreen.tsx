@@ -1,11 +1,53 @@
+import { loginUser } from "@/config/auth";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { ActivityIndicator, Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
-    const handleLogin=()=>{
-        router.navigate("/Registerscreen");
+    const[errormsg,setErrormsg]=useState("")
+    const[email,setEmail]=useState("")
+    const[password,setPassword]=useState("")
+    const[loading,setloading]=useState(false)
+    const handleLogin=async()=>{
+        setloading(true)
+     if(!email||!password){
+        setErrormsg("Fill all the fields");
+        setloading(false)
+        return
+     }  
+     else if(!email.includes("@gmail.com")){
+        setErrormsg("Enter a valid email");
+        setloading(false)
+        return
+     }
+     else{
+        setErrormsg("")
+        try{
+            const user=await loginUser(email,password)
+            if(user.success){
+                Alert.alert("success","Login successfull")
+                router.replace("/(drawer)/(tabs)")
+                await AsyncStorage.setItem("user","true")
+            }
+            else{
+                Alert.alert("Failed","Login failed")
+                console.log(user.message);
+            }
+        }
+
+        catch(error){
+         console.log(error);
+        }
+
+        finally{
+            setloading(false)
+        }
+
+    }
     }
     
     
@@ -21,7 +63,7 @@ export default function LoginScreen() {
 
                     <View style={styles.box1}>
 
-                        <View style={styles.labelbox}><Text style={styles.label}>Email or Phone Number</Text></View>
+                        <View style={styles.labelbox}><Text style={styles.label}>Email</Text></View>
                         <View style={styles.c1_1}>
                         <View style={styles.logobox}>
                         
@@ -33,7 +75,10 @@ export default function LoginScreen() {
 
                     <TextInput style={styles.input}
                     placeholder="Enter Your Email" 
-                    placeholderTextColor={"#3A7BFF"}/>
+                    placeholderTextColor={"#3A7BFF"}
+                    value={email}
+                    onChangeText={setEmail}/>
+                    
                     </View>
                     </View>
 
@@ -51,21 +96,26 @@ export default function LoginScreen() {
                     <TextInput style={styles.input}
                     placeholder="Enter Your Password"
                     placeholderTextColor={"#3A7BFF"}
-                    secureTextEntry={true}/>
+                    secureTextEntry={true}
+                    value={password}
+                    onChangeText={setPassword}/>
                     </View>
                     </View>
-
-                    <TouchableOpacity>
-                        <Text style={styles.forget}>Forget Password?</Text>
-                    </TouchableOpacity>
 
                     
+                    
+                        <Text style={styles.forget} onPress={()=>{router.navigate("/forgetpassscreen")}}>Forget Password?</Text>
+                    
+
+                    <Text style={{fontSize:14,color:"red",fontWeight:"bold"}}>{errormsg}</Text>
+
                     <TouchableOpacity style={styles.loginbtn} onPress={handleLogin}>
-                        <Text style={styles.login}>Login</Text>
-                        <MaterialIcons
+                        {loading ? (<ActivityIndicator size={"small"} color={"white"}/>):(<Text style={styles.login}>Login  <MaterialIcons
                         name="arrow-forward"
                         size={26}
-                        color="white"/>
+                        color="white"/></Text>
+                       
+                        )}
                         
                     </TouchableOpacity>
                     
@@ -97,7 +147,7 @@ export default function LoginScreen() {
                     </View>
 
                     <Text style={{fontSize:14,color:"#8A98AD"}}>Don't have an account?
-                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}}>Sign Up</Text></Text>
+                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}} onPress={()=>{router.navigate("/Registerscreen")}}>Sign Up</Text></Text>
                 </View>
             </ScrollView>
         </SafeAreaView>

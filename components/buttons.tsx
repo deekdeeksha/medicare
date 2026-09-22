@@ -12,10 +12,11 @@ type btnparam={
     fontColor:string
     borSize:number 
     borColor:string
+    onpress:()=>void
 }
-export default function Buttons({icon,iconSize,iconColor,bg,title,btnHeight,btnWidth,fontColor,fontSize,borColor,borSize}:btnparam){
+export default function Buttons({icon,iconSize,iconColor,bg,title,btnHeight,btnWidth,fontColor,fontSize,borColor,borSize,onpress}:btnparam){
     return(
-        <TouchableOpacity style={[styles.button1,{backgroundColor:bg,minHeight:btnHeight,width:btnWidth,borderColor:borColor,borderWidth:borSize}]}>
+        <TouchableOpacity onPress={onpress} style={[styles.button1,{backgroundColor:bg,minHeight:btnHeight,width:btnWidth,borderColor:borColor,borderWidth:borSize}]}>
             <MaterialCommunityIcons
             name={icon}
             size={iconSize}

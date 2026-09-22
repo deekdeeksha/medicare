@@ -4,6 +4,8 @@ import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
 } from "firebase/auth";
+import { signOut } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 
 
 
@@ -99,6 +101,61 @@ export const loginUser = async (
   }
 };
 
+//logout function
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
 
-// Firebase error messages
+    return {
+      success: true,
+      message: "Logged out successfully",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: "Logout failed. Please try again.",
+    };
+  }
+};
+
+//forget password
+
+export const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email.trim());
+
+    return {
+      success: true,
+      message: "Password reset link has been sent to your email.",
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getResetPasswordError(error.code),
+    };
+  }
+};
+
+
+const getResetPasswordError = (errorCode: string) => {
+  switch (errorCode) {
+    case "auth/invalid-email":
+      return "Please enter a valid email address.";
+
+    case "auth/user-not-found":
+      return "No account found with this email.";
+
+    case "auth/too-many-requests":
+      return "Too many requests. Please try again later.";
+
+    case "auth/network-request-failed":
+      return "Network error. Please check your internet connection.";
+
+    default:
+      return "Unable to send reset link. Please try again.";
+  }
+};
+
+
+
  

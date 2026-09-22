@@ -1,19 +1,9 @@
-import { router, useFocusEffect } from "expo-router";
-import { useCallback } from "react";
 import { Image, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Boxes from "../../components/bioboxes";
 import Buttons from "../../components/buttons";
 export default function BiometricSet(){
-    useFocusEffect(
-                 useCallback(()=>{
-                     const timer=setTimeout(() => {
-                         router.replace("/Aboutscreen");
-                     }, 3000);
-        
-                     return()=>clearTimeout(timer);
-                 },[])
-             );
+    
     return(
         <ImageBackground source={require("../../assets/images/biometricbg.jpg")}
         style={{flex:1}}
@@ -57,7 +47,7 @@ export default function BiometricSet(){
                      bg="#6CAA84"
                      title="Set Biometric(Turn on) "
                      btnHeight={60} 
-                     btnWidth={260}
+                     btnWidth={280}
                      fontSize={20}
                      fontColor="white"
                      borColor="white"
@@ -71,7 +61,7 @@ export default function BiometricSet(){
                      bg="white"
                      title="Turn off Biometric "
                      btnHeight={60} 
-                     btnWidth={260}
+                     btnWidth={280}
                      fontSize={20}
                      fontColor="#6CAA84"
                      borColor="#6CAA84"
@@ -116,11 +106,12 @@ const styles=StyleSheet.create({
 
     c2:{
         minHeight:300,
-        width:"90%",
+        width:"100%",
         backgroundColor:"white",
         alignItems:"center",
         justifyContent:"space-evenly",
-        padding:10,
+        paddingHorizontal:10,
+        paddingVertical:20,
         borderRadius:10,
         elevation:10,
         gap:20

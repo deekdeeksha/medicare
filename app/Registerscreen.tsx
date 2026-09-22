@@ -10,7 +10,7 @@ export default function(){
     const[name,setName]=useState("")
      const[email,setEmail]=useState("")
       const[phoneno,setPhoneno]=useState("")
-       const[password,setPassword]=useState("")
+       const[password,setPassword]=useState("") 
         const[confirmpass,setConfirmpass]=useState("")
 
     const handleRegister=async()=>{ 
@@ -201,7 +201,7 @@ export default function(){
                     </View>
 
                     <Text style={{fontSize:14,color:"#8A98AD"}}>Already have an account?
-                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}} onPress={()=>router.replace('/loginscreen')}>Login</Text></Text>
+                        <Text style={{fontSize:14,color:"#3A7BFF",fontWeight:"bold"}} onPress={()=>router.navigate('/loginscreen')}>Login</Text></Text>
             
         
         </View> 
