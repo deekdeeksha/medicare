@@ -1,5 +1,6 @@
 import Footer from "@/components/footer";
 import Slots from "@/components/slots";
+import textToSpeech from "@/config/tts";
 import { router } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,9 +12,14 @@ export default function SlotsScreen() {
     Alert.alert(
       `slot ${slotNum}` ,
       `Fill the pills in the ${slotCol} slots of the dispencer`
-    
     )
- }
+textToSpeech( `slot ${slotNum} Fill the pills in the ${slotCol} slots of the dispencer`,"en")
+textToSpeech(`ಸ್ಲಾಟ್ ${slotNum}. ${slotCol} ಸ್ಲಾಟ್‌ಗಳಲ್ಲಿ ಮಾತ್ರೆಗಳನ್ನು ತುಂಬಿಸಿ.`,"ka");
+textToSpeech(`स्लॉट ${slotNum}। डिस्पेंसर के ${slotCol} स्लॉट में गोलियाँ भरें।`,"hi");
+textToSpeech(`ஸ்லாட் ${slotNum}. மருந்து வழங்கும் கருவியின் ${slotCol} ஸ்லாட்டுகளில் மாத்திரைகளை நிரப்பவும்.`,"ta")
+
+
+}
 const blue = {
   primary: "#195FDB",
   bright: "#3695FF",

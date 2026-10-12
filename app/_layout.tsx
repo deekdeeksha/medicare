@@ -7,9 +7,10 @@ export default function RootLayout() {
         <Stack.Screen name="loginscreen" options={{ headerShown: false}}/> 
         <Stack.Screen name="splashscreen" options={{ headerShown: false }}/>
         <Stack.Screen name="powerbyscreen" options={{ headerShown: false }}/>
-         <Stack.Screen name="Registerscreen" options={{ headerShown: false }}/>
-          <Stack.Screen name="add" options={{ headerShown: false }}/>
-           <Stack.Screen name="verificationscreen" options={{ headerShown: false }}/>
+        <Stack.Screen name="Registerscreen" options={{ headerShown: false }}/>
+        <Stack.Screen name="add" options={{ headerShown: false }}/>
+        <Stack.Screen name="verificationscreen" options={{ headerShown: false }}/>
+        <Stack.Screen name="wifiSetup" options={{ headerShown: false }}/>
         
         </Stack>
     

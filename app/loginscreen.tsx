@@ -1,5 +1,4 @@
 import { loginUser } from "@/config/auth";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
@@ -28,11 +27,13 @@ export default function LoginScreen() {
         setErrormsg("")
         try{
             const user=await loginUser(email,password)
+            const wifi_chosen=await AsyncStorage.getItem("wifi_set")
             if(user.success){
                 Alert.alert("success","Login successfull")
-                router.replace("/(drawer)/(tabs)")
                 await AsyncStorage.setItem("user","true")
+                router.replace("/(drawer)/(tabs)")
             }
+            
             else{
                 Alert.alert("Failed","Login failed")
                 console.log(user.message);

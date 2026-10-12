@@ -14,8 +14,9 @@ export  default function Drawernavigate(){
 
             <Drawer.Screen name="contactscreen" options={{headerShown:true,title:'Contact Us',drawerIcon:({size})=>(<MaterialCommunityIcons name="phone" color={"#195FDB"} size={size} />)}} />
 
-             <Drawer.Screen name="langVoiceScreen" options={{headerShown:true,title:'Contact Us',drawerIcon:({size})=>(<MaterialCommunityIcons name="translate" color={"#6e7a92"} size={size} />)}} />
+            <Drawer.Screen name="langVoiceScreen" options={{headerShown:true,title:'Language & Voice',drawerIcon:({size})=>(<MaterialCommunityIcons name="translate" color={"#6e7a92"} size={size} />)}} />
             
+            <Drawer.Screen name="displaySettings" options={{headerShown:true,title:'Display Settings',drawerIcon:({size})=>(<MaterialCommunityIcons name="tab" color={"#6e7a92"} size={size} />)}} />
             
          
          

@@ -1,12 +1,61 @@
 import Buttons from "@/components/buttons";
+import { logoutUser } from "@/config/auth";
 import { Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Boxes from "../../components/displayboxes";
 
 export default function profileScreen() {
-     
+
+    const[loading,setLoading]=useState(false);
+    
+    const logout=()=>{
+        setLoading(true);
+        Alert.alert(
+            "Logout",
+            "Are you sure logOut??",
+            [
+                {
+                    text:"ok",
+                    onPress:()=>handleLogout()
+                },
+                {
+                    text:"cancel",
+                    onPress:()=>setLoading(false)
+                }
+
+            ]
+        )
+        //setLoading(false)
+        }
+
+
+    const handleLogout=async()=>{
+        setLoading(true);
+        
+        try
+        {
+            const result=await logoutUser();
+            if(result.success){
+              router.replace('/loginscreen');
+              await AsyncStorage.setItem("user","false");
+              console.log(result.message);
+            }
+            else{
+                alert(result.message)
+            }
+        }
+        catch(error){
+            console.log(error);
+        }
+        finally{
+        setLoading(false)
+        }
+    }
+
     return(
         <SafeAreaView style={{flex:1,backgroundColor: "#F7FAF9"}}>
         <View style={styles.container}>
@@ -115,7 +164,8 @@ uri:"https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbM
             iconSize={28}/>
         </View>
 
-        <Buttons 
+        <Buttons
+        onpress={logout} 
         icon="logout"
         iconColor="#E31A17"
         iconSize={24}
@@ -127,6 +177,7 @@ uri:"https://as2.ftcdn.net/v2/jpg/05/49/98/39/1000_F_549983970_bRCkYfk0P6PP5fKbM
         fontSize={16}
         borColor="#F2BCBC"
         borSize={2}
+        load={loading}
         />
 
         

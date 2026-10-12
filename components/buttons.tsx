@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from "react-native";
 type btnparam={
     icon:keyof typeof MaterialCommunityIcons.glyphMap,
     iconSize:number 
@@ -13,16 +13,38 @@ type btnparam={
     borSize:number 
     borColor:string
     onpress:()=>void
+    load:boolean
 }
-export default function Buttons({icon,iconSize,iconColor,bg,title,btnHeight,btnWidth,fontColor,fontSize,borColor,borSize,onpress}:btnparam){
-    return(
+export default function Buttons({load,icon,iconSize,iconColor,bg,title,btnHeight,btnWidth,fontColor,fontSize,borColor,borSize,onpress}:btnparam){
+     return(
         <TouchableOpacity onPress={onpress} style={[styles.button1,{backgroundColor:bg,minHeight:btnHeight,width:btnWidth,borderColor:borColor,borderWidth:borSize}]}>
+            {load ? (
+        <ActivityIndicator
+            size="small"
+            color={fontColor}
+        />
+    ) : (
+        <>
             <MaterialCommunityIcons
-            name={icon}
-            size={iconSize}
-            color={iconColor}/>
-    <Text style={{color:fontColor,fontSize:fontSize,textTransform:"capitalize",fontWeight:"bold"}}>{title}</Text>
-        </TouchableOpacity>
+                name={icon}
+                size={iconSize}
+                color={iconColor}
+            />
+
+            <Text
+                style={{
+                    color: fontColor,
+                    fontSize: fontSize,
+                    textTransform: "capitalize",
+                    fontWeight: "bold",
+                }}
+            >
+                {title}
+            </Text>
+        </>
+    )}
+
+    </TouchableOpacity>
     )
 }
 const styles=StyleSheet.create({

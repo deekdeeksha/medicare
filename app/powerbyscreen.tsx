@@ -9,9 +9,17 @@ export default function PowerByScreen(){
          useCallback(()=>{
              const timer=setTimeout(async()=>{
              const userLogged=await AsyncStorage.getItem("user")
+             const wifi_chosen=await AsyncStorage.getItem("wifi_set")
+             
              if (userLogged==="true"){
-              router.replace("/(drawer)/(tabs)")
-             }
+               if(1){
+                router.replace("/(drawer)/(tabs)")
+                await AsyncStorage.setItem("wifi_set","true")
+              }
+               else{
+                router.replace("/wifiSetup")
+               }  
+             } 
              else{
               router.replace("/loginscreen")
              }
