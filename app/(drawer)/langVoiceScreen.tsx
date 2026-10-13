@@ -1,12 +1,12 @@
 import Bioboxes from "@/components/bioboxes";
 import Buttons from "@/components/buttons";
 import Iconboxes from "@/components/iconBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CompSlider from "../../components/slider";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LangVoiceScreen(){
     const [language,setLanguage]=useState("en");
     const [volume,setVolume]=useState(50);
@@ -71,12 +71,16 @@ export default function LangVoiceScreen(){
 
           <Picker.Item
             label="Kannada (ಕನ್ನಡ)"
-            value="kn"
+            value="ka"
           />
 
           <Picker.Item
             label="Hindi (हिन्दी)"
             value="hi"
+          />
+          <Picker.Item
+            label="Tamil (தமிழ்)"
+            value="ta"
           />
         </Picker>
         </View>

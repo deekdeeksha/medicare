@@ -5,7 +5,6 @@ import { router } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slot from "../../../components/boxButtons";
-
 export default function SlotsScreen() {
 
  const handleSlotInfo=(slotNum:number,slotCol:string)=>{
@@ -13,7 +12,7 @@ export default function SlotsScreen() {
       `slot ${slotNum}` ,
       `Fill the pills in the ${slotCol} slots of the dispencer`
     )
- textToSpeech(slotNum,slotCol)
+   textToSpeech(slotNum,slotCol)
 
 
 }

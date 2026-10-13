@@ -16,7 +16,7 @@ export default function VerificationScreen() {
 
             <Text style={styles.header}>Verification Link Sent !</Text>
 
-            <Text style={styles.description}>We’ve sent a verification link to your email{"\n"}
+            <Text style={styles.description}>We've sent a verification link to your email{"\n"}
           address. Please check your inbox and click{"\n"}
           the link to verify your account.</Text>
 
