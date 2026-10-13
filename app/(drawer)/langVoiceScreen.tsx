@@ -1,8 +1,17 @@
 import Bioboxes from "@/components/bioboxes";
-import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
+import { Picker } from '@react-native-picker/picker';
+import { useState } from "react";
+import { Button, ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import CompSlider from "../../components/slider";
+import Iconboxes from "@/components/iconBox";
+import Buttons from "@/components/buttons";
 export default function LangVoiceScreen(){
+    const [language,setLanguage]=useState("en");
+    const [volume,setVolume]=useState(10);
+    const [speed,setSpeed]=useState(10);
+    const [pitch,setPitch]=useState(10);
+    const [test,setTest]=useState("")
     return(
         <ImageBackground source={require("../../assets/images/lanvoiceimg.png")}
                 style={{flex:1}}
@@ -12,41 +21,282 @@ export default function LangVoiceScreen(){
             <ScrollView style={{flex:1}} contentContainerStyle={{alignItems:"center",justifyContent:"space-evenly",padding:10}}>
         <View style={styles.c1}>
             
-            <View style={styles.c1_1}>
+          <View style={styles.c1_1}>
             <Bioboxes
-             icon="translate"
-             iconSize={28}
-             iconColor="black"
+             icon="web"
+             iconSize={30}
+             iconColor="#3478F6"
              iconBg="white"
-             title="language"
-             subtitle="select your langauge"
+             title="Language"
+             subtitle="Select the language for speech"
              subtitlecolor="gray"
              subtitlesize={14}
              titlesize={18}
             />
-        
-            </View>
+          
+            <View style={styles.dropdownBox}>
+                  <Text style={styles.flag}>🇮🇳</Text>
 
-            
-            <View style={styles.c1_2}>
-                
-            </View>
+         <Picker
+          selectedValue={language}
+          onValueChange={(value) =>setLanguage(value)}
+          style={styles.picker}
+          dropdownIconColor="#142B66"
+        >
+          <Picker.Item
+            label="English"
+            value="en"
+          />
 
+          <Picker.Item
+            label="Kannada (ಕನ್ನಡ)"
+            value="kn"
+          />
 
+          <Picker.Item
+            label="Hindi (हिन्दी)"
+            value="hi"
+          />
+        </Picker>
+      </View>
+      </View>
+
+      <View style={styles.c1_1}>
+            <Bioboxes
+             icon="account-voice"
+             iconSize={30}
+             iconColor="#3478F6"
+             iconBg="white"
+             title="Voice"
+             subtitle="Select speed , pitch and volume"
+             subtitlecolor="gray"
+             subtitlesize={14}
+             titlesize={18}
+            />
+
+            <CompSlider
+            title="Speed"
+            valueStr={`${speed}x`}
+            minValue={0}
+            maxValue={2}
+            step={0.5}
+            value={speed}
+            onChangeValue={setSpeed}
+            minTrackTintCol="blue"
+            maxTrackTintCol="gray"
+            thumbTintCol="orange"
+            disabled={false}
+            sc1="0x"
+            sc2="0.5x"
+            sc3="1x"
+            sc4="1.5x"
+            sc5="2x"
+            />
+
+            <CompSlider
+            title="Volume"
+            valueStr={`${volume}%`}
+            minValue={0}
+            maxValue={2}
+            step={1}
+            value={volume}
+            onChangeValue={setVolume}
+            minTrackTintCol="blue"
+            maxTrackTintCol="gray"
+            thumbTintCol="orange"
+            disabled={false}
+            sc1="0%"
+            sc2="25%"
+            sc3="50%"
+            sc4="75%"
+            sc5="100%"
+            />
+
+            <CompSlider
+            title="Pitch"
+            valueStr={`${pitch}%`}
+            minValue={0}
+            maxValue={2}
+            step={0.5}
+            value={pitch}
+            onChangeValue={setPitch}
+            minTrackTintCol="blue"
+            maxTrackTintCol="gray"
+            thumbTintCol="orange"
+            disabled={false}
+            sc1="0%"
+            sc2="25%"
+            sc3="50%"
+            sc4="75%"
+            sc5="100%"
+            />
         </View>
+
+        <View style={styles.test}>
+            <View style={styles.icon_text}>
+                <Iconboxes
+                icons="chat"
+                iconColor="blue"
+                bgColor="white"
+                width={40}
+                height={40}
+                size={25}
+                />
+            <Text style={styles.h2}>Enter the text to test</Text>
+            </View>
+            <TextInput style={styles.input} placeholder="Enter the text to test the voice."
+            value={test}
+            onChangeText={setTest}/>
+           
+           
+            <Buttons
+                icon="chat"
+                iconSize={20}
+                iconColor="white"
+                bg="#3478F6"
+                title="Test Speech"
+                btnHeight={50}
+                btnWidth={200}
+                fontSize={16}
+                fontColor="white"
+                borSize={0.5}
+                borColor="white"
+                onpress={() => {}}
+                load={false}
+            />
+
+        </View>  
+
+        <Buttons
+                icon="chat"
+                iconSize={20}
+                iconColor="white"
+                bg="#3478F6"
+                title="Save Settings"
+                btnHeight={50}
+                btnWidth={300}
+                fontSize={16}
+                fontColor="white"
+                borSize={0.5}
+                borColor="white"
+                onpress={() => {}}
+                load={false}
+            />         
+        </View>
+    
+
+        
         </ScrollView>
         </SafeAreaView>
         </ImageBackground>
-    )
+    );
 }
 
-const styles=StyleSheet.create({
+    const styles=StyleSheet.create({
     c1:{
         minHeight:200,
         width:"100%",
-        backgroundColor:"pink",
-        borderRadius:20,
+        backgroundColor:"white",
         marginTop:100,
+        padding:10,
+        gap:15,
+        alignItems:"center"
+       
     },
 
+    c1_1:{
+        gap:10,
+        borderRadius:15
+    },
+
+    dropdownBox:{
+        flexDirection:"row",
+        alignItems:"center",
+        height:50,
+        width: "100%",
+        borderWidth: 1,
+        borderColor: "#CDDCF4",
+        borderRadius: 12,
+        paddingLeft: 8,
+        backgroundColor: "white",
+    },
+
+    flag:{
+        fontSize: 20,
+    },
+
+    picker:{
+        flex: 1,
+        height: 55,
+        color: "#142B66"
+    },
+
+    boxes:{
+        minHeight:120,
+        width:'100%',
+        borderRadius:10,
+        borderWidth:1,
+        marginBottom:30,
+        padding:5
+    },
+
+    header:{
+        flexDirection:"row",
+        alignItems:"center",
+        padding:2,
+        paddingHorizontal:3,
+        justifyContent:"space-between",
+    },
+    
+    title:{
+        fontSize:16,
+        fontWeight:"bold",
+    },
+
+    value:{
+        fontSize:14,
+        color:'grey'
+    },
+    scale:{
+        flexDirection:"row",
+        justifyContent:'space-between'
+    },
+    muted:{
+        fontSize:14,
+        color:'gray'
+    },
+
+    test:{
+        minHeight:150,
+        width:"100%",
+        backgroundColor:"rgba(89, 125, 171, 0.2)",
+        borderRadius:10,
+        alignItems:"center",
+        justifyContent:'space-evenly',
+        gap:10,
+        
+    },
+
+    h2:{
+        fontSize:16,
+        fontWeight:"bold",
+        color:"gray"
+    },
+
+    input:{
+        height:50,
+        width:"90%",
+        borderWidth:1,
+        borderColor:"gray",
+        borderRadius:10
+    },
+
+    icon_text:{
+        flexDirection:'row',
+        padding:2,
+        backgroundColor:"white",
+        width:"100%",
+        alignItems:"center",
+        justifyContent:"space-evenly"
+    }
 })
