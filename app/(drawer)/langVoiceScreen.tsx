@@ -3,15 +3,31 @@ import Buttons from "@/components/buttons";
 import Iconboxes from "@/components/iconBox";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from "react";
-import { ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CompSlider from "../../components/slider";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function LangVoiceScreen(){
     const [language,setLanguage]=useState("en");
-    const [volume,setVolume]=useState(10);
-    const [speed,setSpeed]=useState(10);
+    const [volume,setVolume]=useState(50);
+    const [speed,setSpeed]=useState(1.0);
     const [pitch,setPitch]=useState(10);
     const [test,setTest]=useState("")
+
+    const handleSave=async()=>{
+         Alert.alert(
+         "Settings Saved!",
+         `language:${language}\nspeed:${speed}x\nvolume:${volume}%\npitch:${pitch}%`
+        )
+    
+        const languageObj={
+            selectedLan:language,
+            selectedSpeed:speed,
+            selectedVol:volume,
+            selectedPit:pitch
+        }
+        await AsyncStorage.setItem("languageSettings",JSON.stringify(languageObj))
+        }
 
 
 
@@ -156,14 +172,14 @@ export default function LangVoiceScreen(){
            
            
             <Buttons
-                icon="chat"
+                icon="play-circle-outline"
                 iconSize={20}
                 iconColor="white"
                 bg="#3478F6"
                 title="Test Speech"
                 btnHeight={50}
                 btnWidth={200}
-                fontSize={16}
+                fontSize={18}
                 fontColor="white"
                 borSize={0.5}
                 borColor="white"
@@ -173,19 +189,18 @@ export default function LangVoiceScreen(){
 
         </View>  
 
-        <Buttons
-                icon="chat"
+        <Buttons onpress={handleSave}
+                icon="content-save-outline"
                 iconSize={20}
                 iconColor="white"
                 bg="#3478F6"
                 title="Save Settings"
                 btnHeight={50}
                 btnWidth={300}
-                fontSize={16}
+                fontSize={18}
                 fontColor="white"
                 borSize={0.5}
                 borColor="white"
-                onpress={() => {}}
                 load={false}
             />         
         </View>

@@ -13,10 +13,7 @@ export default function SlotsScreen() {
       `slot ${slotNum}` ,
       `Fill the pills in the ${slotCol} slots of the dispencer`
     )
-textToSpeech( `slot ${slotNum} Fill the pills in the ${slotCol} slots of the dispencer`,"en")
-textToSpeech(`ಸ್ಲಾಟ್ ${slotNum}. ${slotCol} ಸ್ಲಾಟ್‌ಗಳಲ್ಲಿ ಮಾತ್ರೆಗಳನ್ನು ತುಂಬಿಸಿ.`,"ka");
-textToSpeech(`स्लॉट ${slotNum}। डिस्पेंसर के ${slotCol} स्लॉट में गोलियाँ भरें।`,"hi");
-textToSpeech(`ஸ்லாட் ${slotNum}. மருந்து வழங்கும் கருவியின் ${slotCol} ஸ்லாட்டுகளில் மாத்திரைகளை நிரப்பவும்.`,"ta")
+ textToSpeech(slotNum,slotCol)
 
 
 }
