@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CompSlider from "../../components/slider";
+import * as speech from "expo-speech";
 export default function LangVoiceScreen(){
     const [language,setLanguage]=useState("en");
     const [volume,setVolume]=useState(50);
@@ -29,6 +30,14 @@ export default function LangVoiceScreen(){
         await AsyncStorage.setItem("languageSettings",JSON.stringify(languageObj))
         }
 
+        const testSpeech=()=>{
+           if(!test){
+            Alert.alert("Error!","Enter the text")
+           } 
+           else{
+            speech.speak(test,{language:language,pitch:pitch,rate:speed,volume:volume})
+           }
+        }
 
 
     return(
@@ -187,7 +196,7 @@ export default function LangVoiceScreen(){
                 fontColor="white"
                 borSize={0.5}
                 borColor="white"
-                onpress={() => {}}
+                onpress={testSpeech}
                 load={false}
             />
 

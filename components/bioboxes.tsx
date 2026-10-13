@@ -20,7 +20,7 @@ export default function Bioboxes({icon,iconSize,iconColor,iconBg,title,subtitle,
                 size={iconSize}
                 color={iconColor}/>
             </View>
-            <View>
+            <View style={{flexDirection:"column",gap:5,justifyContent:"center",minHeight:50,padding:5,backgroundColor:"white",width:"90%",borderRadius:10}}>
                 <Text style={[styles.text1,{fontSize:titlesize}]}>{title}</Text>
                 <Text style={[styles.text2,{fontSize:subtitlesize,color:subtitlecolor}]}>{subtitle}</Text>
             </View>
