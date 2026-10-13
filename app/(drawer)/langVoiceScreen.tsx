@@ -1,17 +1,20 @@
 import Bioboxes from "@/components/bioboxes";
+import Buttons from "@/components/buttons";
+import Iconboxes from "@/components/iconBox";
 import { Picker } from '@react-native-picker/picker';
 import { useState } from "react";
-import { Button, ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CompSlider from "../../components/slider";
-import Iconboxes from "@/components/iconBox";
-import Buttons from "@/components/buttons";
 export default function LangVoiceScreen(){
     const [language,setLanguage]=useState("en");
     const [volume,setVolume]=useState(10);
     const [speed,setSpeed]=useState(10);
     const [pitch,setPitch]=useState(10);
     const [test,setTest]=useState("")
+
+
+
     return(
         <ImageBackground source={require("../../assets/images/lanvoiceimg.png")}
                 style={{flex:1}}
@@ -19,8 +22,11 @@ export default function LangVoiceScreen(){
                 
         <SafeAreaView  style={{flex:1}}>
             <ScrollView style={{flex:1}} contentContainerStyle={{alignItems:"center",justifyContent:"space-evenly",padding:10}}>
+        
         <View style={styles.c1}>
             
+
+
           <View style={styles.c1_1}>
             <Bioboxes
              icon="web"
@@ -35,13 +41,12 @@ export default function LangVoiceScreen(){
             />
           
             <View style={styles.dropdownBox}>
-                  <Text style={styles.flag}>🇮🇳</Text>
-
-         <Picker
-          selectedValue={language}
-          onValueChange={(value) =>setLanguage(value)}
-          style={styles.picker}
-          dropdownIconColor="#142B66"
+                <Text style={styles.flag}>🇮🇳</Text>
+            <Picker
+            selectedValue={language}
+            onValueChange={(value) =>setLanguage(value)}
+            style={styles.picker}
+            dropdownIconColor="#142B66"
         >
           <Picker.Item
             label="English"
@@ -58,10 +63,11 @@ export default function LangVoiceScreen(){
             value="hi"
           />
         </Picker>
-      </View>
+        </View>
+        {/* closing dropdown */}
       </View>
 
-      <View style={styles.c1_1}>
+      <View style={styles.c1_2}>
             <Bioboxes
              icon="account-voice"
              iconSize={30}
@@ -82,7 +88,7 @@ export default function LangVoiceScreen(){
             step={0.5}
             value={speed}
             onChangeValue={setSpeed}
-            minTrackTintCol="blue"
+            minTrackTintCol="#3478F6"
             maxTrackTintCol="gray"
             thumbTintCol="orange"
             disabled={false}
@@ -97,11 +103,11 @@ export default function LangVoiceScreen(){
             title="Volume"
             valueStr={`${volume}%`}
             minValue={0}
-            maxValue={2}
+            maxValue={100}
             step={1}
             value={volume}
             onChangeValue={setVolume}
-            minTrackTintCol="blue"
+            minTrackTintCol="#3478F6"
             maxTrackTintCol="gray"
             thumbTintCol="orange"
             disabled={false}
@@ -116,11 +122,11 @@ export default function LangVoiceScreen(){
             title="Pitch"
             valueStr={`${pitch}%`}
             minValue={0}
-            maxValue={2}
-            step={0.5}
+            maxValue={100}
+            step={25}
             value={pitch}
             onChangeValue={setPitch}
-            minTrackTintCol="blue"
+            minTrackTintCol="#3478F6"
             maxTrackTintCol="gray"
             thumbTintCol="orange"
             disabled={false}
@@ -135,12 +141,12 @@ export default function LangVoiceScreen(){
         <View style={styles.test}>
             <View style={styles.icon_text}>
                 <Iconboxes
-                icons="chat"
-                iconColor="blue"
+                icons="chat-alert"
+                iconColor="#3478F6"
                 bgColor="white"
                 width={40}
                 height={40}
-                size={25}
+                size={30}
                 />
             <Text style={styles.h2}>Enter the text to test</Text>
             </View>
@@ -194,19 +200,36 @@ export default function LangVoiceScreen(){
 
     const styles=StyleSheet.create({
     c1:{
-        minHeight:200,
+        minHeight:500,
         width:"100%",
         backgroundColor:"white",
-        marginTop:100,
+        marginTop:130,
         padding:10,
+        borderRadius:10,
         gap:15,
-        alignItems:"center"
+        paddingBottom:50,
+        alignItems:"center",
+        justifyContent:'space-evenly'
        
     },
 
     c1_1:{
         gap:10,
-        borderRadius:15
+        backgroundColor:'white',
+        borderRadius:15,
+        width:'100%',
+        alignItems:'flex-start',
+        justifyContent:"space-evenly",
+        minHeight:200
+    },
+    c1_2:{
+        gap:10,
+        backgroundColor:'white',
+        borderRadius:15,
+        width:'100%',
+        alignItems:'center',
+        justifyContent:"space-evenly",
+        minHeight:200
     },
 
     dropdownBox:{
@@ -267,13 +290,19 @@ export default function LangVoiceScreen(){
     },
 
     test:{
-        minHeight:150,
-        width:"100%",
-        backgroundColor:"rgba(89, 125, 171, 0.2)",
+        minHeight:250,
+        width:"95%",
+        marginTop:30,
+        elevation:8,
+        padding:5,
+        borderWidth:0.1,
+        borderColor:'gray',
+        backgroundColor:"white",
         borderRadius:10,
         alignItems:"center",
         justifyContent:'space-evenly',
         gap:10,
+        marginBottom:30
         
     },
 
@@ -286,6 +315,7 @@ export default function LangVoiceScreen(){
     input:{
         height:50,
         width:"90%",
+        paddingHorizontal:10,
         borderWidth:1,
         borderColor:"gray",
         borderRadius:10
@@ -295,8 +325,8 @@ export default function LangVoiceScreen(){
         flexDirection:'row',
         padding:2,
         backgroundColor:"white",
-        width:"100%",
+        width:"90%",
         alignItems:"center",
-        justifyContent:"space-evenly"
+        justifyContent:"center"
     }
 })

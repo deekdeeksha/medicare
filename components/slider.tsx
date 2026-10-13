@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from "react-native";
 import Slider from "@react-native-community/slider";
+import { StyleSheet, Text, View } from "react-native";
 type param={
     title:string,
     valueStr:string,
@@ -27,7 +27,7 @@ export default function Sliders({title,valueStr,maxValue,minValue,minTrackTintCo
                     </View>
         
                     <Slider
-                    style={{width:"100%",height:45}}
+                    style={{width:"90%",height:45}}
                     minimumValue={minValue}
                     maximumValue={maxValue}
                     step={step}
@@ -53,11 +53,16 @@ export default function Sliders({title,valueStr,maxValue,minValue,minTrackTintCo
 const styles=StyleSheet.create({
     boxes:{
         minHeight:120,
-        width:'100%',
+        width:"100%",
+        backgroundColor:'white',
         borderRadius:10,
+        marginTop:30,
         borderWidth:0.2,
-        marginBottom:30,
-        padding:5
+        borderColor:'gray',
+        padding:5,
+        elevation:8,
+        paddingHorizontal:10,
+
     },
 
     header:{
