@@ -5,8 +5,11 @@ import { useEffect, useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { saveMedicine } from "../config/medicineStorage";
 export  default function TabletLayout() {
 
+const [medicineName, setMedicineName] = useState("");
+const [notes, setNotes] = useState("");
 const {slot,color}=useLocalSearchParams();
 //need to add text to speech  for  all the info
 
@@ -24,6 +27,51 @@ const[showEndDatePicker,setShowEndDatePicker]=useState(false);//end date shower
 
 const[time ,setTime]=useState(new Date());
 const[showTimePicker,setShowTimePicker]=useState(false);
+
+const handleSave = async () => {
+  if (
+    !medicineName.trim() ||
+    !category ||
+    !frequency ||
+    !compartement
+  ) {
+    Alert.alert("Missing details", "Please enter the medicine name, category, frequency, and slot.");
+    return;
+  }
+
+  if (
+    date > enddate ||
+    date.toDateString() === "" 
+  ) {
+    Alert.alert("Invalid dates", "Please check your start and end dates.");
+    return;
+  }
+
+  try {
+    const medicine = {
+      id: `${compartement}_${Date.now()}`,
+      name: medicineName.trim(),
+      category: category,
+      slot: String(compartement),
+      slotColor: String(C_color || "#195FDB"),
+      frequency: frequency,
+      startDate: date.toISOString(),
+      endDate: enddate.toISOString(),
+      time: `${String(time.getHours()).padStart(2, "0")}:${String(time.getMinutes()).padStart(2, "0")}`,
+      notes: notes.trim(),
+    };
+
+    await saveMedicine(medicine);
+
+    Alert.alert(
+      "Success",
+      `${medicineName} schedule saved successfully.`
+    );
+  } catch (error) {
+    console.error("Error saving medicine:", error);
+    Alert.alert("Error", "Could not save the medicine schedule.");
+  }
+};//save function
 
 //category
 const  categories=[
@@ -134,7 +182,9 @@ const frequnecies=[
     
           <View  style={styles.text}>
             <Text style={styles.h3}>Tablet Name</Text>
-            <TextInput   style={styles.input} placeholder="e.g , Paracetamol 500mg"/>
+            <TextInput   style={styles.input} placeholder="e.g , Paracetamol 500mg"
+            value={medicineName}
+            onChangeText={setMedicineName}/>
           </View>
         </View>
         {/* closing c1 */}
@@ -291,7 +341,9 @@ const frequnecies=[
         
           <View  style={styles.text}>
             <Text style={styles.h3}>Notes (optional)</Text>
-            <TextInput   style={styles.input} placeholder="Add any additional notes"/>
+            <TextInput   style={styles.input} placeholder="Add any additional notes"
+            value={notes}
+            onChangeText={setNotes}/>
           </View>
         </View>
         {/* closing notes */}
@@ -319,7 +371,7 @@ const frequnecies=[
         </View>
         {/* closing container */}
 
-        <TouchableOpacity  style={styles.btn}>
+        <TouchableOpacity  style={styles.btn} onPress={handleSave}>
           <Text style={[styles.h3,{color:'white',fontSize:22}]}><MaterialIcons  name="verified" size={28}/> Save</Text>
           
         </TouchableOpacity>
