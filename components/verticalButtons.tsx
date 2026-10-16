@@ -11,10 +11,11 @@ type verticalButtonProps={
     iconHeight:number,
     iconWidth:number;
     bg:string;
+    onpress:()=>void
 }
-export  default function VerticalButtons({icon,heading,iconSize,iconColor,bg,iconbgColor,iconHeight,iconWidth}:verticalButtonProps){
+export  default function VerticalButtons({onpress,icon,heading,iconSize,iconColor,bg,iconbgColor,iconHeight,iconWidth}:verticalButtonProps){
     return(
-        <TouchableOpacity  style={[styles.btn,{backgroundColor:bg}]}>
+        <TouchableOpacity onPress={onpress} style={[styles.btn,{backgroundColor:bg}]}>
             <Iconboxes  icons={icon} size={iconSize} iconColor={iconColor} height={iconHeight} width={iconWidth}  bgColor={iconbgColor} />
             
             <Text style={styles.titles}>{heading}</Text>

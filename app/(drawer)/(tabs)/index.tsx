@@ -1,19 +1,28 @@
 import Footer from "@/components/footer";
 import VerticalButtons from "@/components/verticalButtons";
-import { ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NextMed from "../../../components/nextMed";
 import StatusField from "../../../components/statusBox";
 import TimeDateSlots from "../../../components/timeDateSlots";
+import {
+  getMedicines,
+  getNextDose,
+  formatDoseTime,
+  Medicine,
+} from "../../../config/medicineStorage";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+
 export default function home  ()  {
-const blue = {
+  const blue = {
   primary: "#195FDB",
   bright: "#3695FF",
   dark: "#123A73",
   light: "#EAF3FF",
 };
 const green = {
-  primary: "#1C9129",
+  primary: "#1C9129", 
   light: "#EEF9F0",
 };
 const purple = {
@@ -28,6 +37,72 @@ const red = {
   primary: "#DC2626",
   light: "#FEF2F2",
 };
+
+const ESP32_IP = "192.168.4.1";
+const BASE_URL = `http://${ESP32_IP}`;
+
+const triggerEmergencyAlert = async () => {
+  console.log("sos  pressed"); 
+  try {
+    const response = await fetch(`${BASE_URL}/buzzer/on`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("ESP32 request failed");
+    }
+
+    Alert.alert("Emergency Alert", "Buzzer activated successfully!");
+  } catch (error) {
+    Alert.alert(
+      "Connection Error",
+      "Could not connect to the Medicare device. Check your Wi-Fi connection."
+    );
+  }
+};
+
+const [nextMedicine, setNextMedicine] = useState<{
+  medicine: Medicine;
+  dose: Date;
+} | null>(null);
+
+useFocusEffect(
+  useCallback(() => {
+    let mounted = true;
+
+    const loadNextMedicine = async () => {
+      const medicines = await getMedicines();
+      const now = new Date();
+
+      const upcoming = medicines
+        .map((medicine) => ({
+          medicine,
+          dose: getNextDose(medicine, now),
+        }))
+        .filter(
+          (item): item is {
+            medicine: Medicine;
+            dose: Date;
+          } => item.dose !== null
+        )
+        .sort(
+          (a, b) =>
+            a.dose.getTime() - b.dose.getTime()
+        );
+
+      if (mounted) {
+        setNextMedicine(upcoming[0] ?? null);
+      }
+    };
+
+    loadNextMedicine();
+
+    return () => {
+      mounted = false;
+    };
+  }, [])
+);
+
   return(
     <ImageBackground source={require("../../../assets/images/homepage.png")} style={{flex:1}}>
     <SafeAreaView style={{flex:1}}>
@@ -72,16 +147,38 @@ const red = {
 
       
       {/* Next medicine schedule field */}
-      <NextMed
-        Uicon="clock"
-        Micon="pill"
-        UiconColor={blue.bright}
-        MiconColor="#1C9129"
-        bgColor="#3694ff34"
-        Uheading="Next Medicine Schedule"
-        maintext="10:30 AM"
-        iconColor="#1C9129"
-      />
+  <View style={styles.nextMedicine}>
+        <Text style={styles.nextTitle}> Next Medicine Schedule </Text>
+
+      {nextMedicine ? (
+      <>
+      <Text style={styles.medicineName}>
+        {nextMedicine.medicine.name}
+      </Text>
+
+      <Text style={styles.medicineTime}>
+        {formatDoseTime(nextMedicine.dose)}
+      </Text>
+
+      <Text style={styles.medicineDetails}>
+        Slot {nextMedicine.medicine.slot}
+        {" • "}
+        {nextMedicine.medicine.category}
+      </Text>
+
+      <Text style={styles.medicineDetails}>
+        {nextMedicine.dose.toDateString() ===
+        new Date().toDateString()
+          ? "Scheduled for today"
+          : `Scheduled for ${nextMedicine.dose.toLocaleDateString()}`}
+      </Text>
+    </>
+  ) : (
+    <Text style={styles.medicineDetails}>
+      No upcoming medicine schedules
+    </Text>
+  )}
+</View>
 
       {/* quick actions */}
       <ScrollView contentContainerStyle={{padding:10,alignItems:'center',justifyContent:'space-evenly',gap:30}} showsHorizontalScrollIndicator={false} horizontal={true} style={styles.scroll}>
@@ -94,8 +191,9 @@ const red = {
         iconWidth={80}
         bg={red.light}
         iconbgColor="white"
+        onpress={triggerEmergencyAlert}
       />
-      <VerticalButtons 
+      <VerticalButtons
         icon="history"
         heading="medicine history"
         iconColor={green.primary}
@@ -104,6 +202,7 @@ const red = {
         iconWidth={80}
         bg={green.light}
         iconbgColor="white"
+        
       />
       <VerticalButtons 
         icon="scan-helper"
@@ -169,6 +268,37 @@ const styles=StyleSheet.create({
     minHeight:150,
     width:"100%",
     borderRadius:10,
-  }
+  },
+  nextMedicine: {
+  width: "100%",
+  padding: 20,
+  borderRadius: 18,
+  backgroundColor: "#EAF3FF",
+  borderWidth: 1,
+  borderColor: "#BBD5FF",
+  elevation: 3,
+},
+nextTitle: {
+  fontSize: 18,
+  fontWeight: "bold",
+  color: "#195FDB",
+  marginBottom: 12,
+},
+medicineName: {
+  fontSize: 24,
+  fontWeight: "bold",
+  color: "#123A73",
+},
+medicineTime: {
+  fontSize: 30,
+  fontWeight: "bold",
+  color: "#195FDB",
+  marginVertical: 8,
+},
+medicineDetails: {
+  fontSize: 15,
+  color: "#555",
+  marginTop: 4,
+},
 
 })
