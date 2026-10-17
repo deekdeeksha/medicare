@@ -12,6 +12,7 @@ import {
   getNextDose,
   Medicine,
 } from "../../../config/medicineStorage";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function home  ()  {
   const blue = {
@@ -160,8 +161,13 @@ useFocusEffect(
         <Text style={styles.subtitle}>Here's your health summary today</Text>
       </View>
 
+      <View style={{width:"90%",minHeight:100,backgroundColor:"white",elevation:8,borderRadius:10,alignItems:"center",justifyContent:"space-evenly"}}>
+        <Text style={{fontSize:18,fontWeight:"bold"}}><MaterialCommunityIcons name="wifi" color="#075B48" size={28}/>   Device Connection</Text>
+        {rtcConnected?(<Text style={{color:"green",fontSize:16,fontWeight:"600"}}>Device Connected</Text>):(<Text style={{color:"red",fontSize:16,fontWeight:"600"}}>Not Connected</Text>)}
+      </View>
       {/* time date box */}
-       <TimeDateSlots 
+      
+      <TimeDateSlots 
        date={rtcDate}
        time={rtcTime}/>
        
