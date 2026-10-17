@@ -1,18 +1,17 @@
 import Footer from "@/components/footer";
 import VerticalButtons from "@/components/verticalButtons";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NextMed from "../../../components/nextMed";
 import StatusField from "../../../components/statusBox";
 import TimeDateSlots from "../../../components/timeDateSlots";
 import {
+  formatDoseTime,
   getMedicines,
   getNextDose,
-  formatDoseTime,
   Medicine,
 } from "../../../config/medicineStorage";
-import { useCallback, useState } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 
 export default function home  ()  {
   const blue = {
@@ -39,6 +38,52 @@ const red = {
 };
 
 const ESP32_IP = "192.168.4.1";
+const TIME_URL = `http://${ESP32_IP}/time`;
+
+const [rtcTime, setRtcTime] = useState("Loading....");
+const [rtcDate, setRtcDate] = useState("Loading....");
+const [rtcConnected, setRtcConnected] = useState(false);
+
+useEffect(() => {
+  let mounted = true;
+
+  const fetchRtcTime = async () => {
+    try {
+      const response = await fetch(TIME_URL);
+
+      if (!response.ok) {
+        throw new Error("RTC request failed");
+      }
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error("RTC is unavailable");
+      }
+
+      if (mounted) {
+        setRtcTime(data.time);
+        setRtcDate(data.date);
+        setRtcConnected(true);
+      }
+    } catch (error) {
+      if (mounted) {
+        setRtcConnected(false);
+      }
+
+      console.log("RTC fetch error:", error);
+    }
+  };
+
+  fetchRtcTime();
+
+  const interval = setInterval(fetchRtcTime, 1000);
+
+  return () => {
+    mounted = false;
+    clearInterval(interval);
+  };
+}, []);
 const BASE_URL = `http://${ESP32_IP}`;
 
 const triggerEmergencyAlert = async () => {
@@ -60,6 +105,7 @@ const triggerEmergencyAlert = async () => {
     );
   }
 };
+
 
 const [nextMedicine, setNextMedicine] = useState<{
   medicine: Medicine;
@@ -110,14 +156,14 @@ useFocusEffect(
     
     {/* name  text     */}
       <View style={{marginRight:70}}>
-        <Text style={styles.heading}>Hello, Deeksha 👋</Text>
+        <Text style={styles.heading}>Hello, Deeksha  👋</Text>
         <Text style={styles.subtitle}>Here's your health summary today</Text>
       </View>
 
       {/* time date box */}
        <TimeDateSlots 
-       date="21 Aug 2026" 
-       time="10:00 AM"/>
+       date={rtcDate}
+       time={rtcTime}/>
        
       {/* Battery and slots field  */}
       <View style={styles.status}>

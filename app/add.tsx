@@ -1,6 +1,6 @@
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Dropdown } from 'react-native-element-dropdown';
@@ -67,6 +67,7 @@ const handleSave = async () => {
       "Success",
       `${medicineName} schedule saved successfully.`
     );
+    router.navigate('/(drawer)/(tabs)');
   } catch (error) {
     console.error("Error saving medicine:", error);
     Alert.alert("Error", "Could not save the medicine schedule.");
