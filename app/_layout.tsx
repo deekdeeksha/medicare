@@ -11,6 +11,7 @@ export default function RootLayout() {
         <Stack.Screen name="add" options={{ headerShown: false }}/>
         <Stack.Screen name="verificationscreen" options={{ headerShown: false }}/>
         <Stack.Screen name="wifiSetup" options={{ headerShown: false }}/>
+          <Stack.Screen name="biometric" options={{ headerShown: false }}/>
         
         </Stack>
     

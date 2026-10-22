@@ -1,6 +1,10 @@
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as LocalAuthentication from "expo-local-authentication";
+import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ImageBackground,
@@ -9,37 +13,27 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as LocalAuthentication from "expo-local-authentication";
-import { useFocusEffect, useRouter } from "expo-router";
 import Boxes from "../../components/bioboxes";
 
-const BIOMETRIC_KEY = "biometricEnabled";
-
 export default function BiometricSet() {
-  const router = useRouter();
-
   const [enabled, setEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
 
-  // Load the saved biometric setting whenever this screen is focused.
   useFocusEffect(
     useCallback(() => {
       let active = true;
 
       const loadSetting = async () => {
         try {
-          const value = await AsyncStorage.getItem(BIOMETRIC_KEY);
+          const value =
+            await AsyncStorage.getItem("biometricEnabled");
 
-          if (active) {
-            setEnabled(value === "true");
-          }
-        } catch (error) {
-          Alert.alert("Error", "Could not load biometric settings.");
+          if (active) setEnabled(value === "true");
+        } catch {
+          Alert.alert("Error", "Unable to load biometric settings.");
         } finally {
           if (active) setLoading(false);
         }
@@ -59,72 +53,61 @@ export default function BiometricSet() {
     setProcessing(true);
 
     try {
-      const hardwareAvailable =
+      const hardware =
         await LocalAuthentication.hasHardwareAsync();
-
-      if (!hardwareAvailable) {
-        Alert.alert(
-          "Not supported",
-          "Your device does not support biometric authentication."
-        );
-        return;
-      }
 
       const enrolled =
         await LocalAuthentication.isEnrolledAsync();
 
-      if (!enrolled) {
+      if (!hardware || !enrolled) {
         Alert.alert(
-          "No biometrics enrolled",
-          "Please register your fingerprint or Face ID in your device settings first."
+          "Biometrics unavailable",
+          "Your device must support biometrics and have a fingerprint or Face ID enrolled."
         );
         return;
       }
 
       const result =
         await LocalAuthentication.authenticateAsync({
-          promptMessage: "Enable biometric authentication",
+          promptMessage: "Enable Medicare biometrics",
           cancelLabel: "Cancel",
           disableDeviceFallback: true,
         });
 
       if (!result.success) {
         Alert.alert(
-          "Authentication cancelled",
-          "Biometric authentication was not enabled."
+          "Not enabled",
+          "Biometric verification was unsuccessful."
         );
         return;
       }
 
-      await AsyncStorage.setItem(BIOMETRIC_KEY, "true");
+      await AsyncStorage.setItem("biometricEnabled", "true");
       setEnabled(true);
 
-      // Navigate only after authentication succeeds and the setting is saved.
+      // Open the biometric verification screen after enabling.
       router.push("/biometric");
-    } catch (error) {
-      Alert.alert(
-        "Error",
-        "Unable to enable biometric authentication."
-      );
+    } catch {
+      Alert.alert("Error", "Could not enable biometrics.");
     } finally {
       setProcessing(false);
     }
   };
 
   const disableBiometric = async () => {
-    if (processing) return;
+    if (!enabled || processing) return;
 
     setProcessing(true);
 
     try {
-      await AsyncStorage.setItem(BIOMETRIC_KEY, "false");
+      await AsyncStorage.setItem("biometricEnabled", "false");
       setEnabled(false);
 
       Alert.alert(
         "Biometrics disabled",
-        "Biometric authentication has been turned off."
+        "You can now open Medicare without biometric verification."
       );
-    } catch (error) {
+    } catch {
       Alert.alert("Error", "Could not disable biometrics.");
     } finally {
       setProcessing(false);
@@ -151,8 +134,8 @@ export default function BiometricSet() {
             <Text style={styles.h1}>Secure Your Account</Text>
 
             <Text style={styles.h3}>
-              Use your fingerprint or Face ID to protect your
-              medicines and personal information.
+              Use your fingerprint to protect your medicines
+              and personal information.
             </Text>
           </View>
 
@@ -163,7 +146,7 @@ export default function BiometricSet() {
               iconColor="#07745e"
               iconBg="#DFF5E5"
               title="Quick Access"
-              subtitle="Unlock supported features using biometrics"
+              subtitle="Verify your identity to access Medicare"
               titlesize={18}
               subtitlesize={14}
               subtitlecolor="#595F64"
@@ -193,7 +176,6 @@ export default function BiometricSet() {
                   ]}
                   onPress={enableBiometric}
                   disabled={enabled || processing}
-                  activeOpacity={0.8}
                 >
                   {processing ? (
                     <ActivityIndicator color="white" />
@@ -201,16 +183,15 @@ export default function BiometricSet() {
                     <Text style={styles.enableText}>
                       {enabled
                         ? "✓ Biometric Enabled"
-                        : "♧ Enable Biometric"}
+                        : "Enable Biometric"}
                     </Text>
                   )}
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={[styles.button, styles.disableButton]}
+                  style={styles.button}
                   onPress={disableBiometric}
-                  disabled={processing || !enabled}
-                  activeOpacity={0.8}
+                  disabled={!enabled || processing}
                 >
                   <Text
                     style={[
@@ -236,11 +217,11 @@ export default function BiometricSet() {
 
 const styles = StyleSheet.create({
   scroll: {
+    flexGrow: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
     padding: 10,
     gap: 15,
-    flexGrow: 1,
   },
   c1: {
     minHeight: 200,
@@ -261,14 +242,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#07745e",
-    marginTop: 8,
   },
   h3: {
     fontSize: 14,
     textAlign: "center",
     color: "#565B67",
     fontWeight: "600",
-    marginTop: 8,
   },
   c2: {
     width: "100%",
@@ -285,6 +264,9 @@ const styles = StyleSheet.create({
     width: 280,
     minHeight: 60,
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#6CAA84",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
@@ -294,12 +276,8 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: "#A8B9AF",
-    opacity: 0.75,
-  },
-  disableButton: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#6CAA84",
+    borderColor: "#A8B9AF",
+    opacity: 0.8,
   },
   enableText: {
     color: "white",
@@ -315,8 +293,8 @@ const styles = StyleSheet.create({
     color: "#A0A0A0",
   },
   status: {
-    color: "#565B67",
     fontSize: 14,
+    color: "#565B67",
     fontWeight: "600",
   },
 });

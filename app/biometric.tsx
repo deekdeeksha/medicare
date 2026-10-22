@@ -1,171 +1,182 @@
 
-import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as LocalAuthentication from "expo-local-authentication";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as LocalAuthentication from "expo-local-authentication";
-import { useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const BIOMETRIC_KEY = "biometricEnabled";
-
 export default function Biometric() {
-  const router = useRouter();
   const [checking, setChecking] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
+  const [message, setMessage] = useState(
+    "Verify your identity to continue"
+  );
+  const [attempt, setAttempt] = useState(0);
 
-  useEffect(() => {
-    let active = true;
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
 
-    const checkBiometric = async () => {
-      try {
-        const enabled = await AsyncStorage.getItem(BIOMETRIC_KEY);
+      const verifyUser = async () => {
+        setChecking(true);
+        setAuthenticated(false);
 
-        // This screen must not be accessible while biometrics are disabled.
-        if (enabled !== "true") {
-          router.replace("/biometricset");
-          return;
-        }
+        try {
+          const enabled =
+            await AsyncStorage.getItem("biometricEnabled");
 
-        const enrolled =
-          await LocalAuthentication.isEnrolledAsync();
+          const loggedIn = await AsyncStorage.getItem("user");
 
-        if (!enrolled) {
-          await AsyncStorage.setItem(BIOMETRIC_KEY, "false");
+          if (!active) return;
 
-          if (active) {
-            Alert.alert(
-              "Biometrics unavailable",
-              "Please enable biometrics again from settings."
-            );
-            router.replace("/biometricset");
+          if (loggedIn !== "true") {
+            router.replace("/loginscreen");
+            return;
           }
-          return;
+
+          if (enabled !== "true") {
+            router.replace("/(drawer)/(tabs)");
+            return;
+          }
+
+          const hasHardware =
+            await LocalAuthentication.hasHardwareAsync();
+
+          const enrolled =
+            await LocalAuthentication.isEnrolledAsync();
+
+          if (!active) return;
+
+          if (!hasHardware || !enrolled) {
+            setMessage(
+              "Biometrics are unavailable. Enable them in your device settings."
+            );
+            return;
+          }
+
+          const result =
+            await LocalAuthentication.authenticateAsync({
+              promptMessage: "Unlock Medicare",
+              cancelLabel: "Cancel",
+              disableDeviceFallback: true,
+            });
+
+          if (!active) return;
+
+          if (result.success) {
+            setAuthenticated(true);
+            router.replace("/(drawer)/(tabs)");
+          } else {
+            setMessage(
+              "Authentication was unsuccessful. Please try again."
+            );
+          }
+        } catch (error) {
+          if (active) {
+            setMessage(
+              "Unable to verify your identity. Please try again."
+            );
+          }
+        } finally {
+          if (active) setChecking(false);
         }
+      };
 
-        const result =
-          await LocalAuthentication.authenticateAsync({
-            promptMessage: "Authenticate to continue",
-            cancelLabel: "Cancel",
-            disableDeviceFallback: true,
-          });
+      verifyUser();
 
-        if (!active) return;
+      return () => {
+        active = false;
+      };
+    }, [attempt])
+  );
 
-        if (result.success) {
-          setAuthenticated(true);
-        } else {
-          // Do not leave the protected screen open after cancellation
-          // or unsuccessful authentication.
-          router.replace("/biometricset");
-        }
-      } catch (error) {
-        if (active) {
-          Alert.alert(
-            "Authentication error",
-            "Unable to verify your biometrics."
-          );
-          router.replace("/biometricset");
-        }
-      } finally {
-        if (active) setChecking(false);
-      }
-    };
+  const retryAuthentication = () => {
+    setMessage("Verify your identity to continue");
+    setAttempt((previous) => previous + 1);
+  };
 
-    checkBiometric();
-
-    return () => {
-      active = false;
-    };
-  }, [router]);
-
-  const turnOffBiometric = async () => {
-    try {
-      await AsyncStorage.setItem(BIOMETRIC_KEY, "false");
-      setAuthenticated(false);
-
-      router.replace("/biometricset");
-    } catch (error) {
-      Alert.alert("Error", "Unable to turn off biometrics.");
-    }
+  const goToLogin = async () => {
+    await AsyncStorage.setItem("user", "false");
+    router.replace("/loginscreen");
   };
 
   if (checking) {
     return (
-      <View style={styles.loading}>
+      <SafeAreaView style={styles.loading}>
         <ActivityIndicator size="large" color="#07745e" />
-        <Text style={styles.loadingText}>
+        <Text style={styles.message}>
           Verifying your identity...
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
-  if (!authenticated) {
+  // Do not render protected content while authentication is pending
+  // or unsuccessful.
+  if (authenticated) {
     return null;
   }
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/biometricbg.jpg")}
-      style={styles.background}
-      resizeMode="cover"
-    >
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <MaterialCommunityIcons
+          name="fingerprint"
+          size={100}
+          color="#07745e"
+        />
+
+        <Text style={styles.title}>Unlock Medicare</Text>
+
+        <Text style={styles.message}>{message}</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={retryAuthentication}
+        >
           <MaterialCommunityIcons
-            name="shield-check"
-            size={90}
-            color="#07745e"
+            name="fingerprint"
+            size={25}
+            color="white"
           />
-
-          <Text style={styles.title}>
-            Biometric Authentication
+          <Text style={styles.buttonText}>
+            Try Again
           </Text>
+        </TouchableOpacity>
 
-          <Text style={styles.subtitle}>
-            Your identity has been verified successfully.
+        <TouchableOpacity
+          style={styles.cancelButton}
+          onPress={goToLogin}
+        >
+          <Text style={styles.cancelText}>
+            Go to Login
           </Text>
-
-          <View style={styles.statusBox}>
-            <MaterialCommunityIcons
-              name="fingerprint"
-              size={32}
-              color="#07745e"
-            />
-            <Text style={styles.statusText}>
-              Biometric authentication is enabled
-            </Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={turnOffBiometric}
-          >
-            <Text style={styles.buttonText}>
-              Turn Off Biometric
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
-    </ImageBackground>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
+    backgroundColor: "#F2FAF6",
+  },
+  loading: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 15,
+    backgroundColor: "#F2FAF6",
   },
   container: {
     flex: 1,
@@ -175,56 +186,37 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#07745e",
-    textAlign: "center",
   },
-  subtitle: {
+  message: {
     fontSize: 16,
     color: "#565B67",
     textAlign: "center",
-  },
-  statusBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    backgroundColor: "white",
-    borderRadius: 12,
-    padding: 20,
-    width: "100%",
-    elevation: 5,
-  },
-  statusText: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#07745e",
+    lineHeight: 24,
   },
   button: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: "#6CAA84",
-    borderRadius: 10,
-    height: 55,
     width: 250,
+    height: 58,
+    backgroundColor: "#6CAA84",
+    borderRadius: 10,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 15,
+    gap: 10,
   },
   buttonText: {
-    fontSize: 17,
+    color: "white",
+    fontSize: 18,
     fontWeight: "600",
+  },
+  cancelButton: {
+    padding: 12,
+  },
+  cancelText: {
     color: "#07745e",
-  },
-  loading: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 12,
-  },
-  loadingText: {
     fontSize: 16,
-    color: "#07745e",
+    fontWeight: "600",
   },
 });
