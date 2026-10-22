@@ -1,5 +1,6 @@
 import Footer from "@/components/footer";
 import VerticalButtons from "@/components/verticalButtons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import { Alert, ImageBackground, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -12,7 +13,6 @@ import {
   getNextDose,
   Medicine,
 } from "../../../config/medicineStorage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function home  ()  {
   const blue = {
@@ -45,6 +45,7 @@ const [rtcTime, setRtcTime] = useState("Loading....");
 const [rtcDate, setRtcDate] = useState("Loading....");
 const [rtcConnected, setRtcConnected] = useState(false);
 
+
 useEffect(() => {
   let mounted = true;
 
@@ -59,17 +60,22 @@ useEffect(() => {
       const data = await response.json();
 
       if (!data.success) {
-        throw new Error("RTC is unavailable");
+        throw new Error("ESP32 request failed");
       }
 
       if (mounted) {
-        setRtcTime(data.time);
-        setRtcDate(data.date);
-        setRtcConnected(true);
+        // ESP32 /time returns rtcTime and rtcDate.
+        setRtcTime(data.rtcTime ?? "--:--:--");
+        setRtcDate(data.rtcDate ?? "--/--/----");
+
+        // Check the actual RTC status, not just HTTP success.
+        setRtcConnected(data.rtcConnected === true);
       }
     } catch (error) {
       if (mounted) {
         setRtcConnected(false);
+        setRtcTime("--:--:--");
+        setRtcDate("--/--/----");
       }
 
       console.log("RTC fetch error:", error);
@@ -85,24 +91,37 @@ useEffect(() => {
     clearInterval(interval);
   };
 }, []);
+
 const BASE_URL = `http://${ESP32_IP}`;
 
 const triggerEmergencyAlert = async () => {
-  console.log("sos  pressed"); 
+  console.log("Emergency alert button pressed");
+
   try {
-    const response = await fetch(`${BASE_URL}/buzzer/on`, {
+    const response = await fetch(`${BASE_URL}/sos`, {
       method: "GET",
     });
 
     if (!response.ok) {
-      throw new Error("ESP32 request failed");
+      throw new Error(`ESP32 returned status ${response.status}`);
     }
 
-    Alert.alert("Emergency Alert", "Buzzer activated successfully!");
-  } catch (error) {
+    const data = await response.json().catch(() => null);
+
+    if (data && data.success === false) {
+      throw new Error("ESP32 could not start the SOS alert");
+    }
+
     Alert.alert(
-      "Connection Error",
-      "Could not connect to the Medicare device. Check your Wi-Fi connection."
+      "Emergency Alert",
+      "The SOS request was sent to the Medicare device."
+    );
+  } catch (error) {
+    console.log("SOS request error:", error);
+
+    Alert.alert(
+      "Emergency Alert Failed",
+      "Could not contact the Medicare device. Connect your phone to the MEDICARE_ESP32 Wi-Fi hotspot and verify that the ESP32 is running."
     );
   }
 };
